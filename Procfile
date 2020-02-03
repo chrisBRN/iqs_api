@@ -1,1 +1,2 @@
-web java -Dserver.port=$PORT $JAVA_OPTS -jar target/iqs-api-1.0.1-SNAPSHOT.jar
+web java -Dserver.port=$PORT $JAVA_OPTS -jar target/iqs_api-1.0.1-SNAPSHOT.jar
+
