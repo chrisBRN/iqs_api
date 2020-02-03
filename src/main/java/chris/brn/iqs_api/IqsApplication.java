@@ -1,4 +1,4 @@
-package brn.iqs.iqs;
+package chris.brn.iqs_api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
