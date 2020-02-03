@@ -31,6 +31,7 @@ public fun generateJWT(): String? {
 
 public fun validateJWT(token: String, audience: String): Boolean {
 
+    // https://github.com/auth0/java-jwt
     val algorithm: Algorithm = Algorithm.HMAC256(signer)
 
     return try {
