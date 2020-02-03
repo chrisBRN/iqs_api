@@ -8,10 +8,10 @@
 		<version>2.2.4.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>brn.iqs</groupId>
-	<artifactId>iqs</artifactId>
+	<groupId>chrisbrn</groupId>
+	<artifactId>iqs_api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>iqs</name>
+	<name>iqs_api</name>
 	<description>Interview Questions Website</description>
 
 	<properties>

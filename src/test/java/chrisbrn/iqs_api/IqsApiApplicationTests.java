@@ -1,10 +1,10 @@
-package chris.brn.iqs;
+package chrisbrn.iqs_api;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class IqsApplicationTests {
+class IqsApiApplicationTests {
 
 	@Test
 	void contextLoads() {

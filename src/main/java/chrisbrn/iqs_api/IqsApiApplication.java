@@ -1,13 +1,13 @@
-package chris.brn.iqs_api;
+package chrisbrn.iqs_api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class IqsApplication {
+public class IqsApiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(IqsApplication.class, args);
+		SpringApplication.run(IqsApiApplication.class, args);
 	}
 
 }
