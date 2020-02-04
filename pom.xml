@@ -134,6 +134,12 @@
 			<artifactId>postgresql</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+			<version>6.2.1</version>
+		</dependency>
+
 
 	</dependencies>
 

@@ -4,7 +4,6 @@ import chrisbrn.iqs_api.models.Credentials;
 
 import chrisbrn.iqs_api.services.AuthService;
 import chrisbrn.iqs_api.services.HttpServiceKt;
-import org.apache.juli.logging.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ModelAttribute;

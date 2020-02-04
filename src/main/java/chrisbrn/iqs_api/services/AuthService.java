@@ -30,7 +30,7 @@ public class AuthService {
 
 	public String generateJWT() {
 
-		long anHour = 1000L * 60L * 60L;
+		final long anHour = 1000L * 60L * 60L;
 
 		try {
 
