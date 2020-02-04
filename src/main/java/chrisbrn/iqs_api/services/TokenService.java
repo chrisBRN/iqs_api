@@ -15,14 +15,14 @@ import java.util.Date;
 // https://github.com/auth0/java-jwt
 
 @Service
-public class AuthService {
+public class TokenService {
 
 	private String signer;
 	Algorithm algorithm;
 	JWTVerifier verifier;
 
 	@Autowired
-	public AuthService(@Qualifier("signer") String signer) {
+	public TokenService(@Qualifier("signer") String signer) {
 		this.algorithm = Algorithm.HMAC256(signer);
 		this.verifier = JWT.require(algorithm).withIssuer("ChrisBRN").build();
 		this.signer = signer;
@@ -69,5 +69,4 @@ public class AuthService {
 	private Boolean isPasswordValid(String password) {
 		return password.equals("password");
 	}
-
 }

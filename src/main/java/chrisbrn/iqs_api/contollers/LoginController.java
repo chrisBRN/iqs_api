@@ -2,7 +2,7 @@ package chrisbrn.iqs_api.contollers;
 
 import chrisbrn.iqs_api.models.Credentials;
 
-import chrisbrn.iqs_api.services.AuthService;
+import chrisbrn.iqs_api.services.TokenService;
 import chrisbrn.iqs_api.services.HttpServiceKt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,19 +16,19 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RequestMapping("/login")
 public class LoginController {
 
-	AuthService authService;
+	TokenService tokenService;
 
 	@Autowired
-	public LoginController(AuthService authService){
-		this.authService = authService;
+	public LoginController(TokenService tokenService){
+		this.tokenService = tokenService;
 	}
 
 	@RequestMapping(value = "", method = POST)
 	public ResponseEntity<String> processLogin(@ModelAttribute Credentials credentials) {
 
-		if (authService.validateCredentials(credentials)) {
+		if (tokenService.validateCredentials(credentials)) {
 
-			final String token = authService.generateJWT();
+			final String token = tokenService.generateJWT();
 
 			return token == null ?
 				HttpServiceKt.badRequest() :

@@ -1,9 +1,13 @@
 package chrisbrn.iqs_api.config;
 
+
+import chrisbrn.iqs_api.models.Credentials;
+import org.jdbi.v3.core.Jdbi;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.net.URI;
@@ -12,7 +16,7 @@ import java.net.URISyntaxException;
 // https://stackoverflow.com/questions/33633243/connecting-to-heroku-postgres-from-spring-boot
 
 @Configuration
-public class DatabaseConfig {
+public class AppConfig {
 
 	@Bean
 	@Profile("dataSource")
@@ -36,5 +40,16 @@ public class DatabaseConfig {
 	@Profile("signer")
 	public String getSigner(){
 		return System.getenv("SIGNER");
+	}
+
+	@Bean
+	@Profile("loginConfig")
+	public Credentials getCredentials() {
+		return new Credentials(System.getenv("INIT_USERNAME"), System.getenv("INIT_USERNAME"));
+	}
+
+	@Bean
+	public Jdbi getJdbi(DataSource dataSource) {
+		return Jdbi.create(dataSource);
 	}
 }
