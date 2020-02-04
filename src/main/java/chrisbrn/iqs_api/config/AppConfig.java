@@ -7,6 +7,8 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -45,11 +47,16 @@ public class AppConfig {
 	@Bean
 	@Profile("loginConfig")
 	public Credentials getCredentials() {
-		return new Credentials(System.getenv("INIT_USERNAME"), System.getenv("INIT_USERNAME"));
+		return new Credentials(System.getenv("INIT_USERNAME"), System.getenv("INIT_PASSWORD"));
 	}
 
 	@Bean
 	public Jdbi getJdbi(DataSource dataSource) {
 		return Jdbi.create(dataSource);
+	}
+
+	@Bean
+	public PasswordEncoder passwordEncoder(){
+		return new BCryptPasswordEncoder(10);
 	}
 }

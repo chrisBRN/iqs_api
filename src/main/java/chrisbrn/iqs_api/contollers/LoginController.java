@@ -2,6 +2,7 @@ package chrisbrn.iqs_api.contollers;
 
 import chrisbrn.iqs_api.models.Credentials;
 
+import chrisbrn.iqs_api.services.DatabaseService;
 import chrisbrn.iqs_api.services.TokenService;
 import chrisbrn.iqs_api.services.HttpServiceKt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,16 +18,18 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 public class LoginController {
 
 	TokenService tokenService;
+	DatabaseService dbService;
 
 	@Autowired
-	public LoginController(TokenService tokenService){
+	public LoginController(TokenService tokenService, DatabaseService databaseService){
 		this.tokenService = tokenService;
+		this.dbService = databaseService;
 	}
 
 	@RequestMapping(value = "", method = POST)
 	public ResponseEntity<String> processLogin(@ModelAttribute Credentials credentials) {
 
-		if (tokenService.validateCredentials(credentials)) {
+		if (dbService.areCredentialsValid(credentials)) {
 
 			final String token = tokenService.generateJWT();
 

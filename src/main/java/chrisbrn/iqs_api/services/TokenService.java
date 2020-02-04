@@ -17,15 +17,13 @@ import java.util.Date;
 @Service
 public class TokenService {
 
-	private String signer;
-	Algorithm algorithm;
-	JWTVerifier verifier;
+	private Algorithm algorithm;
+	private JWTVerifier verifier;
 
 	@Autowired
 	public TokenService(@Qualifier("signer") String signer) {
 		this.algorithm = Algorithm.HMAC256(signer);
 		this.verifier = JWT.require(algorithm).withIssuer("ChrisBRN").build();
-		this.signer = signer;
 	}
 
 	public String generateJWT() {
@@ -33,7 +31,6 @@ public class TokenService {
 		final long anHour = 1000L * 60L * 60L;
 
 		try {
-
 			return JWT.create()
 				.withIssuer("ChrisBRN")
 				.withExpiresAt(new Date(anHour + System.currentTimeMillis()))
@@ -55,18 +52,5 @@ public class TokenService {
 			System.err.println("JWTVerificationFailed");
 		}
 		return false;
-	}
-
-	public Boolean validateCredentials(Credentials credentials) {
-		return isUsernameValid(credentials.getUsername()) &&
-			isPasswordValid(credentials.getPassword());
-	}
-
-	private Boolean isUsernameValid(String username) {
-		return username.equals("username");
-	}
-
-	private Boolean isPasswordValid(String password) {
-		return password.equals("password");
 	}
 }
