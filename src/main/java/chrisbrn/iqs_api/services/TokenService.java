@@ -1,5 +1,6 @@
 package chrisbrn.iqs_api.services;
 
+import chrisbrn.iqs_api.helpers.Logs;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -35,7 +36,7 @@ public class TokenService {
 				.sign(algorithm);
 		}
 		catch (JWTCreationException exception) {
-			System.err.println("JWTCreationException");
+			Logs.tokenGenerationError();
 			return null;
 		}
 	}
@@ -47,7 +48,7 @@ public class TokenService {
 			return true;
 
 		} catch (JWTVerificationException exception) {
-			System.err.println("JWTVerificationFailed");
+			Logs.tokenVerificationError();
 		}
 		return false;
 	}

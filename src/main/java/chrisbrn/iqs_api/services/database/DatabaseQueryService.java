@@ -1,6 +1,7 @@
 package chrisbrn.iqs_api.services.database;
 
 
+import chrisbrn.iqs_api.models.User;
 import org.jdbi.v3.core.Jdbi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,18 +18,23 @@ public class DatabaseQueryService {
 		this.jdbi = jdbi;
 	}
 
-	public Optional<String> getStoredPassword(String username) {
+	public Optional<User> getUser(String username) {
 
-		String sql = "SELECT password FROM USERS WHERE username = '" + username + "'";
+		String sql = "SELECT * FROM users WHERE username = '" + username + "' LIMIT 1;";
 
 		return jdbi.withHandle(handle -> handle
 			.createQuery(sql)
-			.mapTo(String.class)
+			.mapToBean(User.class)
 			.findFirst());
 	}
 
-	public Boolean usernameExists(){
+	public Boolean doesUserExist(String username) {
 
-		return false;
+		String sql = "SELECT EXISTS (SELECT 1 FROM users WHERE username = '" + username + "');";
+
+		return jdbi.withHandle(handle -> handle
+			.createQuery(sql)
+			.mapTo(Boolean.class)
+			.findOnly());
 	}
 }

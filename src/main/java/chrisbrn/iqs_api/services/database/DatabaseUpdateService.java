@@ -29,19 +29,18 @@ public class DatabaseUpdateService {
 
 	public Boolean addUser(User user) {
 
-		// check if already exists
-		// validate email address
-
 		String hashedPassword = hashPassword(user.getPassword());
 
 		String sql = (
 			"INSERT INTO USERS " +
 				"(username, password, role, email) " +
 			"VALUES " +
-				"('" + user.getUsername() + "'," +
-				"('" + hashedPassword + "'," +
-				"('" + user.getRole() + "'," +
-				"('" + user.getEmail() + "');"
+				"(" +
+					"'" + user.getUsername() + "'," +
+					"'" + hashedPassword + "'," +
+					"'" + user.getRole() + "'," +
+					"'" + user.getEmail() + "'" +
+				");"
 		);
 
 		return updateDatabase(sql);

@@ -1,14 +1,14 @@
 package chrisbrn.iqs_api.services;
 
 import chrisbrn.iqs_api.models.Credentials;
+import chrisbrn.iqs_api.models.User;
 import chrisbrn.iqs_api.services.database.DatabaseQueryService;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-
-// https://github.com/auth0/java-jwt
 
 @Service
 public class AuthenticationService {
@@ -22,21 +22,27 @@ public class AuthenticationService {
 		this.dbService = dbService;
 	}
 
-	public Boolean areCredentialsValid(Credentials credentials) {
-		Optional<String> storedPassword = dbService.getStoredPassword(credentials.getUsername());
-
-		if (storedPassword.isEmpty()) {
-			return null;
-		}
-
-		return isPasswordValid(credentials.getPassword(), storedPassword.get());
+	public boolean areCredentialsValid(Credentials credentials) {
+		Optional<User> user = dbService.getUser(credentials.getUsername());
+		return (
+			user.isPresent() &&
+			isPasswordValid(credentials.getPassword(), user.get().getPassword())
+		);
 	}
 
-	private boolean isPasswordValid(String submittedPassword, String storedPassword) {
+	public boolean userExists(String username) {
+		return dbService.doesUserExist(username);
+	}
+
+	public boolean isPasswordValid(String submittedPassword, String storedPassword) {
 		return passwordEncoder.matches(submittedPassword, storedPassword);
 	}
 
-	public boolean isEmailAddressValid() {
-		return false;
+	public boolean isEmailAddressValid(String email) {
+		return EmailValidator.getInstance(false).isValid(email);
 	}
+
+//	public boolean validRole(){
+//		return false;
+//	}
 }

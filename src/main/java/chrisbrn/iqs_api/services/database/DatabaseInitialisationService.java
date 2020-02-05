@@ -31,7 +31,7 @@ public class DatabaseInitialisationService {
 			"BEGIN " +
 			"IF (SELECT COUNT (*) from USERS) = 0 THEN " +
 			"    INSERT INTO users (username, password, role) " +
-			"    VALUES ('" + username + "', '" + password + "', 'ADMIN'); " +
+			"    VALUES ('" + username + "', '" + password + "', 'INITIAL'); " +
 			"END IF; " +
 			"END " +
 			"$init_mode_user$;"

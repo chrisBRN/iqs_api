@@ -3,7 +3,10 @@ package chrisbrn.iqs_api.contollers;
 
 import chrisbrn.iqs_api.models.HttpResponsesKt;
 import chrisbrn.iqs_api.models.User;
+import chrisbrn.iqs_api.services.AuthenticationService;
 import chrisbrn.iqs_api.services.TokenService;
+import chrisbrn.iqs_api.services.database.DatabaseQueryService;
+import chrisbrn.iqs_api.services.database.DatabaseUpdateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -18,27 +21,37 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 public class UserManagementController {
 
 	TokenService tokenService;
+	AuthenticationService authService;
+	DatabaseUpdateService dbUpdateService;
 
 	@Autowired
-	public UserManagementController(TokenService tokenService) {
+	public UserManagementController(TokenService tokenService, AuthenticationService authService, DatabaseUpdateService dbUpdateService) {
 		this.tokenService = tokenService;
+		this.authService = authService;
+		this.dbUpdateService = dbUpdateService;
 	}
 
 	@RequestMapping(value = "/add-user", method = POST)
 	public ResponseEntity<String> addUser(@RequestHeader(value = "token") String token, @ModelAttribute User user) {
 
-		if(!tokenService.validateJWT(token)){
+		if(!tokenService.validateJWT(token)) {
 			return HttpResponsesKt.badRequest("Login Required");
 		}
 
-		// do something
+		if (authService.userExists(user.getUsername())) {
+			return HttpResponsesKt.badRequest("Username Taken");
+		}
 
+		if (!authService.isEmailAddressValid(user.getEmail())) {
+			return HttpResponsesKt.badRequest("Please Enter A Valid Email Address");
+		}
 
+		if (dbUpdateService.addUser(user)) {
+			return HttpResponsesKt.ok("Success - User Added");
+		}
 
-
-
-		return HttpResponsesKt.ok("Success - User Added");
+		return dbUpdateService.addUser(user) ?
+			HttpResponsesKt.ok("Success - User Added") :
+			HttpResponsesKt.badRequest("Failed To Add User");
 	}
-
-
 }
