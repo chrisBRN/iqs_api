@@ -45,7 +45,7 @@ public class AppConfig {
 	}
 
 	@Bean
-	@Profile("loginConfig")
+	@Profile("initAdminCredentials")
 	public Credentials getCredentials() {
 		return new Credentials(System.getenv("INIT_USERNAME"), System.getenv("INIT_PASSWORD"));
 	}

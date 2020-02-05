@@ -3,7 +3,7 @@ package chrisbrn.iqs_api.contollers;
 import chrisbrn.iqs_api.models.Credentials;
 
 import chrisbrn.iqs_api.services.DatabaseService;
-import chrisbrn.iqs_api.services.TokenService;
+import chrisbrn.iqs_api.services.AuthenticationService;
 import chrisbrn.iqs_api.services.HttpServiceKt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,27 +17,25 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RequestMapping("/login")
 public class LoginController {
 
-	TokenService tokenService;
-	DatabaseService dbService;
+	AuthenticationService authService;
 
 	@Autowired
-	public LoginController(TokenService tokenService, DatabaseService databaseService){
-		this.tokenService = tokenService;
-		this.dbService = databaseService;
+	public LoginController(AuthenticationService authService) {
+		this.authService = authService;
 	}
 
 	@RequestMapping(value = "", method = POST)
 	public ResponseEntity<String> processLogin(@ModelAttribute Credentials credentials) {
 
-		if (dbService.areCredentialsValid(credentials)) {
+		if (authService.areCredentialsValid(credentials)) {
 
-			final String token = tokenService.generateJWT();
+			final String token = authService.generateJWT();
 
 			return token == null ?
-				HttpServiceKt.badRequest() :
+				HttpServiceKt.badRequest("There Was An Error Please Try Again") :
 				HttpServiceKt.ok(token);
 		}
 
-		return HttpServiceKt.badRequest();
+		return HttpServiceKt.badRequest("Invalid Credentials");
 	}
 }
