@@ -1,34 +1,28 @@
-package chrisbrn.iqs_api.services;
+package chrisbrn.iqs_api.services.database;
 
 import chrisbrn.iqs_api.models.Credentials;
-import org.jdbi.v3.core.Jdbi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
-public class InitialisationService {
+public class DatabaseInitialisationService {
 
 	private Credentials initAdminCredentials;
-	private Jdbi jdbi;
-	private AuthenticationService authService;
+	private DatabaseUpdateService dbService;
 
 	@Autowired
-	public InitialisationService(Credentials initAdminCredentials, Jdbi jdbi, AuthenticationService authService) {
+	public DatabaseInitialisationService(Credentials initAdminCredentials, DatabaseUpdateService dbService) {
 		this.initAdminCredentials = initAdminCredentials;
-		this.jdbi = jdbi;
-		this.authService = authService;
+		this.dbService = dbService;
 	}
 
 	@EventListener(ApplicationReadyEvent.class)
 	private void initializeAdminUserIfNoOtherUsersExist(){
 
 		String username = initAdminCredentials.getUsername();
-		String password = authService.hashPassword(initAdminCredentials.getPassword());
+		String password = dbService.hashPassword(initAdminCredentials.getPassword());
 
 		String sql = (
 
@@ -43,9 +37,6 @@ public class InitialisationService {
 			"$init_mode_user$;"
 		);
 
-		jdbi.withHandle(handle -> handle.createUpdate(sql).execute());
+		dbService.updateDatabase(sql);
 	}
-
 }
-
-
