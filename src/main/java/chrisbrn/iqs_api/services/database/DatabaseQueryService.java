@@ -27,5 +27,8 @@ public class DatabaseQueryService {
 			.findFirst());
 	}
 
-	public
+	public Boolean usernameExists(){
+
+		return false;
+	}
 }
