@@ -1,6 +1,7 @@
 package chrisbrn.iqs_api.services.database;
 
 import chrisbrn.iqs_api.models.Credentials;
+import chrisbrn.iqs_api.models.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
@@ -31,7 +32,7 @@ public class DatabaseInitialisationService {
 			"BEGIN " +
 			"IF (SELECT COUNT (*) from USERS) = 0 THEN " +
 			"    INSERT INTO users (username, password, role) " +
-			"    VALUES ('" + username + "', '" + password + "', 'INITIAL'); " +
+			"    VALUES ('" + username + "', '" + password + "', '" + UserRole.INIT + "'); " +
 			"END IF; " +
 			"END " +
 			"$init_mode_user$;"

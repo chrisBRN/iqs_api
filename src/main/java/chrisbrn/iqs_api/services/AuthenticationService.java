@@ -2,6 +2,7 @@ package chrisbrn.iqs_api.services;
 
 import chrisbrn.iqs_api.models.Credentials;
 import chrisbrn.iqs_api.models.User;
+import chrisbrn.iqs_api.models.UserRole;
 import chrisbrn.iqs_api.services.database.DatabaseQueryService;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,14 @@ public class AuthenticationService {
 		return EmailValidator.getInstance(false).isValid(email);
 	}
 
-//	public boolean validRole(){
-//		return false;
-//	}
+	public boolean validRole(String roleToCheck){
+
+		for (UserRole role : UserRole.values()){
+
+			if (role.name().equals(roleToCheck)){
+				return true;
+			}
+		}
+		return false;
+	}
 }

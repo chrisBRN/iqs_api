@@ -34,21 +34,13 @@ public class UserManagementController {
 	@RequestMapping(value = "/add-user", method = POST)
 	public ResponseEntity<String> addUser(@RequestHeader(value = "token") String token, @ModelAttribute User user) {
 
-		if(!tokenService.validateJWT(token)) {
-			return HttpResponsesKt.badRequest("Login Required");
-		}
+		// In Memory Checks
+		if (!tokenService.validateJWT(token)) {						return HttpResponsesKt.badRequest("Login Required"); }
+		if (!authService.isEmailAddressValid(user.getEmail())) {	return HttpResponsesKt.badRequest("Please Enter A Valid Email Address"); }
+		if (!authService.validRole(user.getRole())) { 				return HttpResponsesKt.badRequest("Please Enter A Valid Role"); }
 
-		if (authService.userExists(user.getUsername())) {
-			return HttpResponsesKt.badRequest("Username Taken");
-		}
-
-		if (!authService.isEmailAddressValid(user.getEmail())) {
-			return HttpResponsesKt.badRequest("Please Enter A Valid Email Address");
-		}
-
-		if (dbUpdateService.addUser(user)) {
-			return HttpResponsesKt.ok("Success - User Added");
-		}
+		// DB Check
+		if (authService.userExists(user.getUsername())) { 			return HttpResponsesKt.badRequest("Username Taken"); }
 
 		return dbUpdateService.addUser(user) ?
 			HttpResponsesKt.ok("Success - User Added") :
