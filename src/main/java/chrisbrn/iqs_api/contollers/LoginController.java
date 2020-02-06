@@ -6,6 +6,7 @@ import chrisbrn.iqs_api.models.HttpResponsesKt;
 import chrisbrn.iqs_api.models.User;
 import chrisbrn.iqs_api.services.AuthenticationService;
 import chrisbrn.iqs_api.services.TokenService;
+import chrisbrn.iqs_api.services.database.DatabaseQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,24 +23,28 @@ public class LoginController {
 
 	TokenService tokenService;
 	AuthenticationService authService;
+	DatabaseQueryService dbQueryService;
 
 	@Autowired
-	public LoginController(AuthenticationService authService, TokenService tokenService) {
+	public LoginController(AuthenticationService authService, DatabaseQueryService dbQueryService, TokenService tokenService) {
 		this.authService = authService;
 		this.tokenService = tokenService;
+		this.dbQueryService = dbQueryService;
 	}
 
 	@RequestMapping(value = "", method = POST)
-	public ResponseEntity<String> processLogin(@ModelAttribute Credentials credentials) {
+	public ResponseEntity<String> Login(@ModelAttribute Credentials credentials) {
 
-		final String token = tokenService.generateJWT();
+		Optional<User> user = dbQueryService.getUser(credentials.getUsername());
 
-		if(token == null){
-			return HttpResponsesKt.serverError();
+		if (user.isEmpty() || !authService.isPasswordValid(credentials, user.get())) {
+			return HttpResponsesKt.badRequest("Invalid Credentials");
 		}
 
-		return authService.areCredentialsValid(credentials) ?
-			HttpResponsesKt.okLogin(token) :
-			HttpResponsesKt.badRequest("Invalid Credentials");
+		String token = tokenService.generateJWT(user.get().getRole());
+
+		return token == null ?
+			HttpResponsesKt.serverError() :
+			HttpResponsesKt.okLogin(tokenService.generateJWT(user.get().getRole()));
 	}
 }

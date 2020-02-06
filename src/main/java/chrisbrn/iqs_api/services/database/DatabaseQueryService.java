@@ -28,13 +28,7 @@ public class DatabaseQueryService {
 			.findFirst());
 	}
 
-	public Boolean doesUserExist(String username) {
-
-		String sql = "SELECT EXISTS (SELECT 1 FROM users WHERE username = '" + username + "');";
-
-		return jdbi.withHandle(handle -> handle
-			.createQuery(sql)
-			.mapTo(Boolean.class)
-			.findOnly());
+	public boolean userExists(String username) {
+		return getUser(username).isPresent();
 	}
 }

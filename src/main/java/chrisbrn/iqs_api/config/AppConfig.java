@@ -38,9 +38,9 @@ public class AppConfig {
 			.build();
 	}
 
-	@Bean(name="signer")
+	@Bean(name = "signer")
 	@Profile("signer")
-	public String getSigner(){
+	public String getSigner() {
 		return System.getenv("SIGNER");
 	}
 
@@ -56,7 +56,7 @@ public class AppConfig {
 	}
 
 	@Bean
-	public PasswordEncoder passwordEncoder(){
+	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder(12);
 	}
 }

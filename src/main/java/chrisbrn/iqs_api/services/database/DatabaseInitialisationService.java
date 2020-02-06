@@ -20,7 +20,7 @@ public class DatabaseInitialisationService {
 	}
 
 	@EventListener(ApplicationReadyEvent.class)
-	private void initializeAdminUserIfNoOtherUsersExist(){
+	private void initializeAdminUserIfNoOtherUsersExist() {
 
 		String username = initAdminCredentials.getUsername();
 		String password = dbService.hashPassword(initAdminCredentials.getPassword());
@@ -28,14 +28,14 @@ public class DatabaseInitialisationService {
 		String sql = (
 
 			"DO " +
-			"$init_mode_user$ " +
-			"BEGIN " +
-			"IF (SELECT COUNT (*) from USERS) = 0 THEN " +
-			"    INSERT INTO users (username, password, role) " +
-			"    VALUES ('" + username + "', '" + password + "', '" + UserRole.INIT + "'); " +
-			"END IF; " +
-			"END " +
-			"$init_mode_user$;"
+				"$init_mode_user$ " +
+				"BEGIN " +
+				"IF (SELECT COUNT (*) from USERS) = 0 THEN " +
+				"    INSERT INTO users (username, password, role) " +
+				"    VALUES ('" + username + "', '" + password + "', '" + UserRole.INIT + "'); " +
+				"END IF; " +
+				"END " +
+				"$init_mode_user$;"
 		);
 
 		dbService.updateDatabase(sql);

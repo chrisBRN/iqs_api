@@ -18,7 +18,7 @@ public class DatabaseUpdateService {
 		this.passwordEncoder = passwordEncoder;
 	}
 
-	public Boolean updateDatabase(String SQLString){
+	public Boolean updateDatabase(String SQLString) {
 		int count = jdbi.withHandle(handle -> handle.createUpdate(SQLString).execute());
 		return count != 0;
 	}
@@ -34,12 +34,12 @@ public class DatabaseUpdateService {
 		String sql = (
 			"INSERT INTO USERS " +
 				"(username, password, role, email) " +
-			"VALUES " +
+				"VALUES " +
 				"(" +
-					"'" + user.getUsername() + "'," +
-					"'" + hashedPassword + "'," +
-					"'" + user.getRole() + "'," +
-					"'" + user.getEmail() + "'" +
+				"'" + user.getUsername() + "'," +
+				"'" + hashedPassword + "'," +
+				"'" + user.getRole() + "'," +
+				"'" + user.getEmail() + "'" +
 				");"
 		);
 

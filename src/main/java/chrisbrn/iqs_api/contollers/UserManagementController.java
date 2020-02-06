@@ -23,24 +23,34 @@ public class UserManagementController {
 	TokenService tokenService;
 	AuthenticationService authService;
 	DatabaseUpdateService dbUpdateService;
+	DatabaseQueryService dbQueryService;
 
 	@Autowired
-	public UserManagementController(TokenService tokenService, AuthenticationService authService, DatabaseUpdateService dbUpdateService) {
+	public UserManagementController(TokenService tokenService, AuthenticationService authService, DatabaseUpdateService dbUpdateService, DatabaseQueryService dbQueryService) {
 		this.tokenService = tokenService;
 		this.authService = authService;
 		this.dbUpdateService = dbUpdateService;
+		this.dbQueryService = dbQueryService;
 	}
 
 	@RequestMapping(value = "/add-user", method = POST)
 	public ResponseEntity<String> addUser(@RequestHeader(value = "token") String token, @ModelAttribute User user) {
 
 		// In Memory Checks
-		if (!tokenService.validateJWT(token)) {						return HttpResponsesKt.badRequest("Login Required"); }
-		if (!authService.isEmailAddressValid(user.getEmail())) {	return HttpResponsesKt.badRequest("Please Enter A Valid Email Address"); }
-		if (!authService.validRole(user.getRole())) { 				return HttpResponsesKt.badRequest("Please Enter A Valid Role"); }
+		if (!tokenService.validateJWT(token)) {
+			return HttpResponsesKt.badRequest("Login Required");
+		}
+		if (!authService.isEmailAddressValid(user.getEmail())) {
+			return HttpResponsesKt.badRequest("Please Enter A Valid Email Address");
+		}
+		if (!authService.isRoleValid(user.getRole())) {
+			return HttpResponsesKt.badRequest("Please Enter A Valid Role");
+		}
 
 		// DB Check
-		if (authService.userExists(user.getUsername())) { 			return HttpResponsesKt.badRequest("Username Taken"); }
+		if (dbQueryService.userExists(user.getUsername())) {
+			return HttpResponsesKt.badRequest("Username Taken");
+		}
 
 		return dbUpdateService.addUser(user) ?
 			HttpResponsesKt.ok("Success - User Added") :
