@@ -3,6 +3,7 @@ package chrisbrn.iqs_api.services.database;
 import chrisbrn.iqs_api.models.User;
 import org.jdbi.v3.core.Jdbi;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -10,12 +11,11 @@ import org.springframework.stereotype.Service;
 public class DatabaseUpdateService {
 
 	private Jdbi jdbi;
-	PasswordEncoder passwordEncoder;
+
 
 	@Autowired
-	public DatabaseUpdateService(Jdbi jdbi, PasswordEncoder passwordEncoder) {
+	public DatabaseUpdateService(Jdbi jdbi) {
 		this.jdbi = jdbi;
-		this.passwordEncoder = passwordEncoder;
 	}
 
 	public Boolean updateDatabase(String SQLString) {
@@ -24,7 +24,8 @@ public class DatabaseUpdateService {
 	}
 
 	public String hashPassword(String password) {
-		return passwordEncoder.encode(password);
+		PasswordEncoder encoder = new BCryptPasswordEncoder(12);
+		return encoder.encode(password);
 	}
 
 	public Boolean addUser(User user) {

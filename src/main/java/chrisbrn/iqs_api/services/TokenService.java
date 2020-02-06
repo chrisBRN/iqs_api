@@ -1,7 +1,7 @@
 package chrisbrn.iqs_api.services;
 
 import chrisbrn.iqs_api.helpers.Logs;
-import chrisbrn.iqs_api.models.UserRole;
+import chrisbrn.iqs_api.models.User;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -26,7 +26,7 @@ public class TokenService {
 		this.verifier = JWT.require(algorithm).withIssuer("ChrisBRN").build();
 	}
 
-	public String generateJWT(String role) {
+	public String generateJWT(User user) {
 
 		final long anHour = 1000L * 60L * 60L;
 
@@ -34,7 +34,9 @@ public class TokenService {
 			return JWT.create()
 				.withIssuer("ChrisBRN")
 				.withExpiresAt(new Date(anHour + System.currentTimeMillis()))
-				.withClaim("role", role)
+				.withClaim("role", user.getRole())
+				.withClaim("username", user.getUsername())
+				.withClaim("password", user.getPassword())
 				.sign(algorithm);
 		} catch (JWTCreationException exception) {
 			Logs.tokenGenerationError();

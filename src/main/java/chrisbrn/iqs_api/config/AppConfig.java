@@ -40,7 +40,7 @@ public class AppConfig {
 
 	@Bean(name = "signer")
 	@Profile("signer")
-	public String getSigner() {
+	public static String getSigner() {
 		return System.getenv("SIGNER");
 	}
 
@@ -53,10 +53,5 @@ public class AppConfig {
 	@Bean
 	public Jdbi getJdbi(DataSource dataSource) {
 		return Jdbi.create(dataSource);
-	}
-
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder(12);
 	}
 }

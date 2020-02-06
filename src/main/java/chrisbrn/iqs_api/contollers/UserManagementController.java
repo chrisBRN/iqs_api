@@ -3,7 +3,7 @@ package chrisbrn.iqs_api.contollers;
 
 import chrisbrn.iqs_api.models.HttpResponsesKt;
 import chrisbrn.iqs_api.models.User;
-import chrisbrn.iqs_api.services.AuthenticationService;
+import chrisbrn.iqs_api.services.AuthenticationKt;
 import chrisbrn.iqs_api.services.TokenService;
 import chrisbrn.iqs_api.services.database.DatabaseQueryService;
 import chrisbrn.iqs_api.services.database.DatabaseUpdateService;
@@ -21,14 +21,12 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 public class UserManagementController {
 
 	TokenService tokenService;
-	AuthenticationService authService;
 	DatabaseUpdateService dbUpdateService;
 	DatabaseQueryService dbQueryService;
 
 	@Autowired
-	public UserManagementController(TokenService tokenService, AuthenticationService authService, DatabaseUpdateService dbUpdateService, DatabaseQueryService dbQueryService) {
+	public UserManagementController(TokenService tokenService, DatabaseUpdateService dbUpdateService, DatabaseQueryService dbQueryService) {
 		this.tokenService = tokenService;
-		this.authService = authService;
 		this.dbUpdateService = dbUpdateService;
 		this.dbQueryService = dbQueryService;
 	}
@@ -36,14 +34,16 @@ public class UserManagementController {
 	@RequestMapping(value = "/add-user", method = POST)
 	public ResponseEntity<String> addUser(@RequestHeader(value = "token") String token, @ModelAttribute User user) {
 
+//		if(AuthenticationKt.canAddUser())
+
 		// In Memory Checks
 		if (!tokenService.validateJWT(token)) {
 			return HttpResponsesKt.badRequest("Login Required");
 		}
-		if (!authService.isEmailAddressValid(user.getEmail())) {
+		if (!AuthenticationKt.isEmailAddressValid(user.getEmail())) {
 			return HttpResponsesKt.badRequest("Please Enter A Valid Email Address");
 		}
-		if (!authService.isRoleValid(user.getRole())) {
+		if (!AuthenticationKt.isRoleValid(user.getRole())) {
 			return HttpResponsesKt.badRequest("Please Enter A Valid Role");
 		}
 
@@ -56,4 +56,22 @@ public class UserManagementController {
 			HttpResponsesKt.ok("Success - User Added") :
 			HttpResponsesKt.badRequest("Failed To Add User");
 	}
+
+	@RequestMapping(value = "/update-user", method = POST)
+	public ResponseEntity<String> updateUser(@RequestHeader(value = "token") String token, @ModelAttribute User user) {
+
+
+
+		return HttpResponsesKt.badRequest();
+	}
+
+
+
+
+
+
+
+
+
+
 }
