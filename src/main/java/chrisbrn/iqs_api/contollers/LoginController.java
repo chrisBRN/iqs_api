@@ -36,6 +36,7 @@ public class LoginController {
 	public ResponseEntity<String> Login(@ModelAttribute Credentials credentials) {
 
 		TestKt.dosomething();
+		System.out.println("yo");
 
 		Optional<User> user = dbQueryService.getUser(credentials.getUsername());
 
