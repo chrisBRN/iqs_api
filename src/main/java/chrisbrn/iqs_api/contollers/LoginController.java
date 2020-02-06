@@ -6,8 +6,7 @@ import chrisbrn.iqs_api.models.HttpResponsesKt;
 import chrisbrn.iqs_api.models.User;
 
 import chrisbrn.iqs_api.services.AuthenticationKt;
-import chrisbrn.iqs_api.services.TestKt;
-import chrisbrn.iqs_api.services.TokenService;
+import chrisbrn.iqs_api.services.TokenServiceKt;
 import chrisbrn.iqs_api.services.database.DatabaseQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,20 +22,16 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RequestMapping("/login")
 public class LoginController {
 
-	TokenService tokenService;
+//	TokenService tokenService;
 	DatabaseQueryService dbQueryService;
 
 	@Autowired
-	public LoginController(DatabaseQueryService dbQueryService, TokenService tokenService) {
-		this.tokenService = tokenService;
+	public LoginController(DatabaseQueryService dbQueryService) {
 		this.dbQueryService = dbQueryService;
 	}
 
 	@RequestMapping(value = "", method = POST)
 	public ResponseEntity<String> Login(@ModelAttribute Credentials credentials) {
-
-		TestKt.dosomething();
-		System.out.println("yo");
 
 		Optional<User> user = dbQueryService.getUser(credentials.getUsername());
 
@@ -44,7 +39,7 @@ public class LoginController {
 			return HttpResponsesKt.badRequest("Invalid Credentials");
 		}
 
-		String token = tokenService.generateJWT(user.get());
+		String token = TokenServiceKt.generateJWT(user.get());
 
 		return token == null ?
 			HttpResponsesKt.serverError() :

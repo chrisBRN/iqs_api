@@ -1,10 +1,12 @@
 package chrisbrn.iqs_api.contollers;
 
 
+import chrisbrn.iqs_api.models.Credentials;
 import chrisbrn.iqs_api.models.HttpResponsesKt;
 import chrisbrn.iqs_api.models.User;
 import chrisbrn.iqs_api.services.AuthenticationKt;
-import chrisbrn.iqs_api.services.TokenService;
+
+import chrisbrn.iqs_api.services.TokenServiceKt;
 import chrisbrn.iqs_api.services.database.DatabaseQueryService;
 import chrisbrn.iqs_api.services.database.DatabaseUpdateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,19 +16,20 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
 @RequestMapping("/admin")
 public class UserManagementController {
 
-	TokenService tokenService;
+
 	DatabaseUpdateService dbUpdateService;
 	DatabaseQueryService dbQueryService;
 
 	@Autowired
-	public UserManagementController(TokenService tokenService, DatabaseUpdateService dbUpdateService, DatabaseQueryService dbQueryService) {
-		this.tokenService = tokenService;
+	public UserManagementController(DatabaseUpdateService dbUpdateService, DatabaseQueryService dbQueryService) {
 		this.dbUpdateService = dbUpdateService;
 		this.dbQueryService = dbQueryService;
 	}
@@ -34,12 +37,15 @@ public class UserManagementController {
 	@RequestMapping(value = "/add-user", method = POST)
 	public ResponseEntity<String> addUser(@RequestHeader(value = "token") String token, @ModelAttribute User user) {
 
-//		if(AuthenticationKt.canAddUser())
-
 		// In Memory Checks
-		if (!tokenService.validateJWT(token)) {
+		if (!TokenServiceKt.isValidToken(token)) {
 			return HttpResponsesKt.badRequest("Login Required");
 		}
+
+		Credentials suppliedTokenCredentials = TokenServiceKt.decodeToken(token);
+		Optional<User> storedUser = dbQueryService.getUser(suppliedTokenCredentials.getUsername());
+//		TODO Check if these match
+
 		if (!AuthenticationKt.isEmailAddressValid(user.getEmail())) {
 			return HttpResponsesKt.badRequest("Please Enter A Valid Email Address");
 		}

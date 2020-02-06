@@ -2,6 +2,7 @@ package chrisbrn.iqs_api.config;
 
 
 import chrisbrn.iqs_api.models.Credentials;
+import chrisbrn.iqs_api.models.UserRole;
 import org.jdbi.v3.core.Jdbi;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
@@ -47,7 +48,7 @@ public class AppConfig {
 	@Bean
 	@Profile("initAdminCredentials")
 	public Credentials getCredentials() {
-		return new Credentials(System.getenv("INIT_USERNAME"), System.getenv("INIT_PASSWORD"));
+		return new Credentials(System.getenv("INIT_USERNAME"), System.getenv("INIT_PASSWORD"), UserRole.INIT.name());
 	}
 
 	@Bean

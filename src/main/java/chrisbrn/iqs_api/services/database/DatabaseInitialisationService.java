@@ -24,6 +24,7 @@ public class DatabaseInitialisationService {
 
 		String username = initAdminCredentials.getUsername();
 		String password = dbService.hashPassword(initAdminCredentials.getPassword());
+		String role = initAdminCredentials.getRole();
 
 		String sql = (
 
@@ -32,7 +33,7 @@ public class DatabaseInitialisationService {
 				"BEGIN " +
 				"IF (SELECT COUNT (*) from USERS) = 0 THEN " +
 				"    INSERT INTO users (username, password, role) " +
-				"    VALUES ('" + username + "', '" + password + "', '" + UserRole.INIT + "'); " +
+				"    VALUES ('" + username + "', '" + password + "', '" + role + "'); " +
 				"END IF; " +
 				"END " +
 				"$init_mode_user$;"
