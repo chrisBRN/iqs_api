@@ -3,7 +3,6 @@ package chrisbrn.iqs_api.models
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 
-@JvmOverloads
 fun okLogin(token: String): ResponseEntity<String> {
     return ResponseEntity(token, HttpStatus.OK)
 }
@@ -11,6 +10,11 @@ fun okLogin(token: String): ResponseEntity<String> {
 @JvmOverloads
 fun ok(message: String = "Success"): ResponseEntity<String> {
     return ResponseEntity(message, HttpStatus.OK)
+}
+
+@JvmOverloads
+fun forbidden(message: String = "Access Denied"): ResponseEntity<String> {
+    return ResponseEntity(message, HttpStatus.FORBIDDEN)
 }
 
 @JvmOverloads

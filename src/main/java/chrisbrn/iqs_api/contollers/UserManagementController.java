@@ -1,12 +1,10 @@
 package chrisbrn.iqs_api.contollers;
 
 
-import chrisbrn.iqs_api.models.Credentials;
 import chrisbrn.iqs_api.models.HttpResponsesKt;
 import chrisbrn.iqs_api.models.User;
-import chrisbrn.iqs_api.services.AuthenticationKt;
+import chrisbrn.iqs_api.services.authentication.*;
 
-import chrisbrn.iqs_api.services.TokenServiceKt;
 import chrisbrn.iqs_api.services.database.DatabaseQueryService;
 import chrisbrn.iqs_api.services.database.DatabaseUpdateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Optional;
+import java.util.Map;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -24,33 +22,38 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RequestMapping("/admin")
 public class UserManagementController {
 
-
-	DatabaseUpdateService dbUpdateService;
-	DatabaseQueryService dbQueryService;
+	private DatabaseUpdateService dbUpdateService;
+	private DatabaseQueryService dbQueryService;
+	private TokenService tokenService;
+	private AuthService authService;
 
 	@Autowired
-	public UserManagementController(DatabaseUpdateService dbUpdateService, DatabaseQueryService dbQueryService) {
+	public UserManagementController(DatabaseUpdateService dbUpdateService,
+									DatabaseQueryService dbQueryService,
+									TokenService tokenService,
+									AuthService authService) {
+
 		this.dbUpdateService = dbUpdateService;
 		this.dbQueryService = dbQueryService;
+		this.tokenService = tokenService;
+		this.authService = authService;
 	}
 
 	@RequestMapping(value = "/add-user", method = POST)
 	public ResponseEntity<String> addUser(@RequestHeader(value = "token") String token, @ModelAttribute User user) {
 
-		// In Memory Checks
-		if (!TokenServiceKt.isValidToken(token)) {
-			return HttpResponsesKt.badRequest("Login Required");
+
+//
+//		if (!authService..hasAddCandidatePrivileges(tokenService.getDecodedJWT(token).getRole())) {
+//			return HttpResponsesKt.forbidden();
+//		}
+
+		if (!authService.isEmailValid(user.getEmail())) {
+			return HttpResponsesKt.badRequest("Invalid Email Address");
 		}
 
-		Credentials suppliedTokenCredentials = TokenServiceKt.decodeToken(token);
-		Optional<User> storedUser = dbQueryService.getUser(suppliedTokenCredentials.getUsername());
-//		TODO Check if these match
-
-		if (!AuthenticationKt.isEmailAddressValid(user.getEmail())) {
-			return HttpResponsesKt.badRequest("Please Enter A Valid Email Address");
-		}
-		if (!AuthenticationKt.isRoleValid(user.getRole())) {
-			return HttpResponsesKt.badRequest("Please Enter A Valid Role");
+		if (!authService.isRoleValid(user.getRole())){
+			return HttpResponsesKt.badRequest("Invalid Role");
 		}
 
 		// DB Check
@@ -67,17 +70,8 @@ public class UserManagementController {
 	public ResponseEntity<String> updateUser(@RequestHeader(value = "token") String token, @ModelAttribute User user) {
 
 
-
 		return HttpResponsesKt.badRequest();
 	}
-
-
-
-
-
-
-
-
 
 
 }

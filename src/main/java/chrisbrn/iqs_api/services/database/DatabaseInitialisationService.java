@@ -1,7 +1,7 @@
 package chrisbrn.iqs_api.services.database;
 
-import chrisbrn.iqs_api.models.Credentials;
-import chrisbrn.iqs_api.models.UserRole;
+import chrisbrn.iqs_api.models.User;
+import chrisbrn.iqs_api.services.authentication.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
@@ -10,35 +10,29 @@ import org.springframework.stereotype.Service;
 @Service
 public class DatabaseInitialisationService {
 
-	private Credentials initAdminCredentials;
-	private DatabaseUpdateService dbService;
+	private DatabaseUpdateService dbUpdateService;
+	private DatabaseQueryService dbQueryService;
 
 	@Autowired
-	public DatabaseInitialisationService(Credentials initAdminCredentials, DatabaseUpdateService dbService) {
-		this.initAdminCredentials = initAdminCredentials;
-		this.dbService = dbService;
+	public DatabaseInitialisationService(DatabaseUpdateService dbUpdateService, DatabaseQueryService dbQueryService) {
+		this.dbUpdateService = dbUpdateService;
+		this.dbQueryService = dbQueryService;
 	}
 
 	@EventListener(ApplicationReadyEvent.class)
-	private void initializeAdminUserIfNoOtherUsersExist() {
+	private void initialSetup() {
 
-		String username = initAdminCredentials.getUsername();
-		String password = dbService.hashPassword(initAdminCredentials.getPassword());
-		String role = initAdminCredentials.getRole();
+		dbUpdateService.updateSigner();
 
-		String sql = (
+		User init = new User();
 
-			"DO " +
-				"$init_mode_user$ " +
-				"BEGIN " +
-				"IF (SELECT COUNT (*) from USERS) = 0 THEN " +
-				"    INSERT INTO users (username, password, role) " +
-				"    VALUES ('" + username + "', '" + password + "', '" + role + "'); " +
-				"END IF; " +
-				"END " +
-				"$init_mode_user$;"
-		);
+		init.setUsername("Admin");
+		init.setPassword("ChangeThis");
+		init.setRole(Role.ADMIN.name());
+		init.setEmail("");
 
-		dbService.updateDatabase(sql);
+		if (!dbQueryService.userExists(init.getUsername())) {
+			dbUpdateService.addUser(init);
+		}
 	}
 }

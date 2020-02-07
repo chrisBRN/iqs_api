@@ -1,5 +1,7 @@
 package chrisbrn.iqs_api.models;
 
+import java.beans.ConstructorProperties;
+
 public class User {
 
 	private String username;
