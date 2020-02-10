@@ -1,12 +1,12 @@
 package chrisbrn.iqs_api.models;
 
-public class TokenClaims {
+public class ClaimsModel {
 
 	private String role;
 	private String username;
 	private String email;
 
-	public TokenClaims(String role, String username, String email){
+	public ClaimsModel(String role, String username, String email) {
 		this.role = role;
 		this.username = username;
 		this.email = email;

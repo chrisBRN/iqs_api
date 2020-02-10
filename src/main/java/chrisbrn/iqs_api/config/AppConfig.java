@@ -1,12 +1,15 @@
 package chrisbrn.iqs_api.config;
 
-import chrisbrn.iqs_api.models.Signer;
+
+
 import org.jdbi.v3.core.Jdbi;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.sql.DataSource;
 import java.net.URI;
@@ -18,7 +21,7 @@ import java.net.URISyntaxException;
 @EnableScheduling
 public class AppConfig {
 
-	@Bean
+	@Bean(name = "dataSource")
 	@Profile("dataSource")
 	public DataSource getDataSource() throws URISyntaxException {
 		URI dbUri = new URI(System.getenv("DATABASE_URL"));
@@ -40,4 +43,5 @@ public class AppConfig {
 	public Jdbi getJdbi(DataSource dataSource) {
 		return Jdbi.create(dataSource);
 	}
+
 }
