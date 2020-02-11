@@ -1,8 +1,7 @@
 package chrisbrn.iqs_api.services.authentication;
-import chrisbrn.iqs_api.services.authentication.privilege.Role;
+import chrisbrn.iqs_api.models.api.User;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.stereotype.Service;
-import java.util.Optional;
 
 @Service
 public class AuthenticationUtilities {
@@ -31,23 +30,39 @@ public class AuthenticationUtilities {
 			password.matches(pattern);
 	}
 
-	public boolean isAValidRole(String role) {
-
+	public boolean isStringAValidRole(String role) {
 		try {
-			Role.valueOf(role);
+			return Role.valueOf(role) != Role.NO_ROLE;
 		} catch (Exception e) {
 			return false;
 		}
-		return true;
 	}
 
-	public Optional<Role> getRoleFromString(String role) {
-
-		try {
-			return Optional.of(Role.valueOf(role));
-		} catch (Exception e) {
-			return Optional.empty();
+	public Role getRoleFromString(String role) {
+		if (isStringAValidRole(role)){
+			return Role.valueOf(role);
 		}
+		return Role.NO_ROLE;
+	}
+
+	public int getHierarchyFromString(String role){
+		return getRoleFromString(role).getHierarchy();
+	}
+
+	public boolean userModelMatchesExpectedPatterns(User user){
+		return (user == null ||
+			!isUsernamePatternValid(user.getUsername()) ||
+			!isPasswordPatternValid(user.getPassword()) ||
+			!isEmailPatternValid(user.getEmail()) ||
+			!isStringAValidRole(user.getRole()));
+	}
+
+	public boolean roleHasRequiredMinimumOneToOnePrivilege(String role, User user) {
+
+		int currentLevel = getHierarchyFromString(role);
+
+		return 	currentLevel < Role.EMPLOYEE.getHierarchy() ||
+				currentLevel < Role.valueOf(user.getRole()).getHierarchy();
 	}
 
 }

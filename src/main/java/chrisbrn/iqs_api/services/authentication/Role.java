@@ -1,9 +1,10 @@
-package chrisbrn.iqs_api.services.authentication.privilege;
+package chrisbrn.iqs_api.services.authentication;
 
 public enum Role {
 	ADMIN (3),
 	EMPLOYEE (2),
-	CANDIDATE (1);
+	CANDIDATE (1),
+	NO_ROLE (0);
 
 	private final int hierarchy;
 

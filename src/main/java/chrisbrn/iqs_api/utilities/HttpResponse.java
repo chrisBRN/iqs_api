@@ -9,6 +9,10 @@ public class HttpResponse {
 		return ResponseEntity.status(HttpStatus.OK).body(token);
 	}
 
+	static public ResponseEntity<String> okNewToken(String token) {
+		return ResponseEntity.status(HttpStatus.OK).body(token);
+	}
+
 	static public ResponseEntity<String> ok(String message) {
 		return ResponseEntity.status(HttpStatus.OK).body(message);
 	}
@@ -27,6 +31,10 @@ public class HttpResponse {
 
 	static public ResponseEntity<String> forbidden() {
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Username Or Password Does Not Match");
+	}
+
+	static public ResponseEntity<String> oldToken() {
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Please Login");
 	}
 
 	static public ResponseEntity<String> unauthorised() {

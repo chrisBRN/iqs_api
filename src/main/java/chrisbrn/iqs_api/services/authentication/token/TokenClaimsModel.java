@@ -1,12 +1,14 @@
-package chrisbrn.iqs_api.models;
+package chrisbrn.iqs_api.services.authentication.token;
 
-public class ClaimsModel {
+public class TokenClaimsModel {
 
+	private int userId;
 	private String role;
 	private String username;
 	private String email;
 
-	public ClaimsModel(String role, String username, String email) {
+	public TokenClaimsModel(int userId, String role, String username, String email) {
+		this.userId = userId;
 		this.role = role;
 		this.username = username;
 		this.email = email;
@@ -22,5 +24,9 @@ public class ClaimsModel {
 
 	public String getEmail() {
 		return email;
+	}
+
+	public int getUserId() {
+		return userId;
 	}
 }

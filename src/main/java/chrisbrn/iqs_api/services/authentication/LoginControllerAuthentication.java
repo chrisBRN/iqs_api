@@ -10,34 +10,34 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class AuthenticateLogin {
+public class LoginControllerAuthentication {
 
 	@Autowired AuthenticationUtilities authUtils;
 	@Autowired DatabaseQuery dbQuery;
 	@Autowired PasswordService pwService;
 
-	private boolean detailsMatchExpectedPatterns(LoginDetails loginDetails) {
-		return 	authUtils.isUsernamePatternValid(loginDetails.getUsername()) &&
-				authUtils.isPasswordPatternValid(loginDetails.getPassword());
+	public boolean loginDetailsMatchExpectedPatterns(LoginDetails details) {
+		return 	authUtils.isUsernamePatternValid(details.getUsername()) &&
+				authUtils.isPasswordPatternValid(details.getPassword());
 	}
 
-	public Optional<User> getUserIfDetailsMatchDB(LoginDetails loginDetails){
+	public Optional<User> getUserIfDetailsMatchDB(LoginDetails details){
 
-		if (!detailsMatchExpectedPatterns(loginDetails)) {
-			return Optional.empty();
-		}
-
-		Optional<User> user = dbQuery.getUser(loginDetails.getUsername());
+		Optional<User> user = dbQuery.getUserByUsername(details.getUsername());
 
 		if(user.isEmpty()){
 			return Optional.empty();
 		}
 
-		String providedPW = loginDetails.getPassword();
+		String providedPW = details.getPassword();
 		String storedPW = user.get().getPassword();
 
 		return pwService.passwordMatches(providedPW, storedPW) ?
 			user :
 			Optional.empty();
 	}
+
+
+
+
 }

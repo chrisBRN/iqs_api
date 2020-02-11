@@ -15,12 +15,12 @@ public class DatabaseUpdate {
 	@Autowired private PasswordService passwordService;
 	@Autowired private TokenService tokenService;
 
-	public Boolean updateDatabase(String SQLStatement) {
+	public boolean updateDatabase(String SQLStatement) {
 		int count = jdbi.withHandle(handle -> handle.createUpdate(SQLStatement).execute());
 		return count != 0;
 	}
 
-	public Boolean addUser(User user) {
+	public boolean addUser(User user) {
 
 		String hashedPassword = passwordService.hash(user.getPassword());
 
@@ -39,12 +39,50 @@ public class DatabaseUpdate {
 		return updateDatabase(sql);
 	}
 
-	public Boolean updateSigner() {
+	/** Ignores Role, Preventing Role Changes */
+	public boolean editSelf(String oldUsername, User newDetail){
+
+		String hashedPassword = passwordService.hash(newDetail.getPassword());
+
+		String sql = (
+			"UPDATE USERS " +
+				"SET " +
+					"username = '" + newDetail.getUsername() + "', " +
+					"password = '" + hashedPassword + "', " +
+					"email = '" + newDetail.getEmail() + "' " +
+				"WHERE username = '" + oldUsername + "';"
+		);
+
+		return updateDatabase(sql);
+	}
+
+	public boolean updatePassword(String username, String password){
+		String hashedPassword = passwordService.hash(password);
+
+		String sql = (
+			"UPDATE USERS " +
+				"SET " +
+				"password = '" + hashedPassword + "' " +
+				"WHERE username = '" + username + "';"
+		);
+
+		return updateDatabase(sql);
+	}
+
+	public boolean deleteUser(String userId){
+		String sql = "DELETE FROM users WHERE id = " + userId + ";";
+		return updateDatabase(sql);
+	}
+
+
+
+	public void updateSigner() {
 //		String signer = passwordService.generate(64);
 		String signer = "123";
 		tokenService.updateTokenParts(signer);
 		String sql = "UPDATE SIGNER SET signer = '" + signer + "';";
-		return updateDatabase(sql);
+
+		updateDatabase(sql);
 	}
 }
 

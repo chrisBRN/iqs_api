@@ -13,5 +13,8 @@ CREATE TABLE signer (
 	CONSTRAINT signer_uni CHECK (signer_id)
 );
 
- INSERT INTO signer (signer)
- VALUES ('temp')
+INSERT INTO USERS (username, role)
+VALUES('Admin', 'ADMIN');
+
+INSERT INTO signer (signer)
+VALUES ('temp');

@@ -6,6 +6,8 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class DatabaseInitialisation {
 
@@ -17,15 +19,13 @@ public class DatabaseInitialisation {
 
 		dbUpdateService.updateSigner();
 
-		User init = new User();
+		Optional<User> init = dbQueryService.getUserByUsername("Admin");
 
-		init.setUsername("Admin");
-		init.setPassword("ChangeThis_4E@6d6u?");
-		init.setRole("ADMIN");
-		init.setEmail("");
+		if(init.isPresent()){
 
-		if (!dbQueryService.userExists(init.getUsername())) {
-			dbUpdateService.addUser(init);
+			if(init.get().getPassword() == null){
+				dbUpdateService.updatePassword("Admin","ChangeThis_4E@6d6u?");
+			}
 		}
 	}
 }

@@ -4,7 +4,7 @@ import chrisbrn.iqs_api.models.api.LoginDetails;
 import chrisbrn.iqs_api.models.api.User;
 import chrisbrn.iqs_api.services.authentication.token.TokenService;
 import chrisbrn.iqs_api.utilities.HttpResponse;
-import chrisbrn.iqs_api.services.authentication.AuthenticateLogin;
+import chrisbrn.iqs_api.services.authentication.LoginControllerAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,22 +19,26 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RequestMapping("/login")
 public class LoginController {
 
-	@Autowired AuthenticateLogin authLogin;
+	@Autowired LoginControllerAuthentication auth;
 	@Autowired TokenService tokenService;
 
 	@RequestMapping(value = "", method = POST)
 	public ResponseEntity<String> Login(@ModelAttribute LoginDetails loginDetails) {
 
-		Optional<User> user = authLogin.getUserIfDetailsMatchDB(loginDetails);
+		if (auth.loginDetailsMatchExpectedPatterns(loginDetails)){
+			return HttpResponse.badDto();
+		}
+
+		Optional<User> user = auth.getUserIfDetailsMatchDB(loginDetails);
 
 		if (user.isEmpty()) {
 			return HttpResponse.forbidden();
 		}
 
-		String token = tokenService.generateToken(user.get());
+		Optional<String> token = tokenService.generateToken(user.get());
 
-		return token == null ?
+		return token.isEmpty() ?
 			HttpResponse.tryAgain() :
-			HttpResponse.loginSuccess(token);
+			HttpResponse.loginSuccess(token.get());
 	}
 }
