@@ -25,9 +25,9 @@ public class LoginController {
 	@RequestMapping(value = "", method = POST)
 	public ResponseEntity<String> Login(@ModelAttribute LoginDetails loginDetails) {
 
-		Optional<User> user = 	authLogin.getUserIfDetailsMatchDB(loginDetails);
+		Optional<User> user = authLogin.getUserIfDetailsMatchDB(loginDetails);
 
-		if(user.isEmpty()) {
+		if (user.isEmpty()) {
 			return HttpResponse.forbidden();
 		}
 

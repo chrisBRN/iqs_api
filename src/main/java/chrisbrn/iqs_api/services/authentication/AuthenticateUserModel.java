@@ -13,10 +13,10 @@ public class AuthenticateUserModel {
 	public boolean isValid(User user){
 		return (
 			!(user == null) &&
-				authenticationUtilities.isUsernameValid(user.getUsername()) &&
-				authenticationUtilities.isPasswordValid(user.getPassword()) &&
-				authenticationUtilities.isEmailValid(user.getEmail()) &&
-				authenticationUtilities.isRoleValid(user.getRole())
+				authenticationUtilities.isUsernamePatternValid(user.getUsername()) &&
+				authenticationUtilities.isPasswordPatternValid(user.getPassword()) &&
+				authenticationUtilities.isEmailPatternValid(user.getEmail()) &&
+				authenticationUtilities.isAValidRole(user.getRole())
 		);
 	}
 }

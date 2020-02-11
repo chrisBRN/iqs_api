@@ -17,21 +17,27 @@ public class AuthenticateLogin {
 	@Autowired PasswordService pwService;
 
 	private boolean detailsMatchExpectedPatterns(LoginDetails loginDetails) {
-		return 	authUtils.isUsernameValid(loginDetails.getUsername()) &&
-				authUtils.isPasswordValid(loginDetails.getPassword());
+		return 	authUtils.isUsernamePatternValid(loginDetails.getUsername()) &&
+				authUtils.isPasswordPatternValid(loginDetails.getPassword());
 	}
 
 	public Optional<User> getUserIfDetailsMatchDB(LoginDetails loginDetails){
 
-		if (detailsMatchExpectedPatterns(loginDetails)) {
-
-			Optional<User> user = dbQuery.getUser(loginDetails.getUsername());
-
-			return 	user.isPresent() &&
-					pwService.isPasswordValid(loginDetails.getPassword(), user.get().getPassword()) ?
-				user :
-				Optional.empty();
+		if (!detailsMatchExpectedPatterns(loginDetails)) {
+			return Optional.empty();
 		}
-		return Optional.empty();
+
+		Optional<User> user = dbQuery.getUser(loginDetails.getUsername());
+
+		if(user.isEmpty()){
+			return Optional.empty();
+		}
+
+		String providedPW = loginDetails.getPassword();
+		String storedPW = user.get().getPassword();
+
+		return pwService.passwordMatches(providedPW, storedPW) ?
+			user :
+			Optional.empty();
 	}
 }

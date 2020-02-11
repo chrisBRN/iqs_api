@@ -20,7 +20,7 @@ public class TokenService {
 	private final String issuer = "ChrisBRN";
 
 	// Called each time the signer is updated via the DatabaseUpdate
-	public void updateTokenParts(String signer){
+	public void updateTokenParts(String signer) {
 		this.algorithm = Algorithm.HMAC256(signer);
 		this.verifier = JWT.require(algorithm).withIssuer(issuer).build();
 	}
@@ -29,12 +29,12 @@ public class TokenService {
 		try {
 			long hour = 1000L * 60L * 60L;
 			return JWT.create()
-						.withIssuer(issuer)
-						.withExpiresAt(new Date(hour + System.currentTimeMillis()))
-						.withClaim("role", user.getRole())
-						.withClaim("username", user.getUsername())
-						.withClaim("email", user.getEmail())
-						.sign(algorithm);
+				.withIssuer(issuer)
+				.withExpiresAt(new Date(hour + System.currentTimeMillis()))
+				.withClaim("role", user.getRole())
+				.withClaim("username", user.getUsername())
+				.withClaim("email", user.getEmail())
+				.sign(algorithm);
 		} catch (JWTCreationException exception) {
 			return null;
 		}

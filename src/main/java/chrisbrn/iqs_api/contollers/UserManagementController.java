@@ -1,8 +1,8 @@
 package chrisbrn.iqs_api.contollers;
 
 import chrisbrn.iqs_api.models.api.User;
-import chrisbrn.iqs_api.models.Role;
 import chrisbrn.iqs_api.models.ClaimsModel;
+import chrisbrn.iqs_api.services.authentication.privilege.AuthenticatePrivilege;
 import chrisbrn.iqs_api.services.authentication.AuthenticateUserModel;
 import chrisbrn.iqs_api.services.authentication.token.TokenService;
 import chrisbrn.iqs_api.services.database.DatabaseQuery;
@@ -18,13 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
-@RequestMapping("/admin/")
+@RequestMapping("/admin")
 public class UserManagementController {
 
 	@Autowired AuthenticateUserModel authenticateUserModel;
 	@Autowired TokenService tokenService;
 	@Autowired DatabaseQuery dbQuery;
 	@Autowired DatabaseUpdate dbUpdate;
+	@Autowired AuthenticatePrivilege authPermission;
 
 	@RequestMapping(value = "/add-user", method = POST)
 	public ResponseEntity<String> addUser(@RequestHeader(value = "token") String token, @ModelAttribute User user) {
@@ -39,10 +40,7 @@ public class UserManagementController {
 			return HttpResponse.badDto();
 		}
 
-		int permissionRequired = Role.valueOf(user.getRole()).getPermissionLevel();
-		int claimedPermission = Role.valueOf(claims.getRole()).getPermissionLevel();
-
-		if (claimedPermission <= permissionRequired) {
+		if (!authPermission.hasOneToOnePermission(claims.getRole(), user.getRole())) {
 			return HttpResponse.unauthorised();
 		}
 
@@ -55,5 +53,18 @@ public class UserManagementController {
 			HttpResponse.ok("User Added") :
 			HttpResponse.bad("Failed To Add User");
 	}
+
+
+
+	@RequestMapping(value = "/edit-user", method = POST)
+	public ResponseEntity<String> editUser(@RequestHeader(value = "token") String token, @ModelAttribute User user) {
+
+		
+
+
+
+		return HttpResponse.bad("!");
+	}
+
 
 }

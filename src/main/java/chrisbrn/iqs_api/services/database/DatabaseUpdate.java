@@ -40,7 +40,8 @@ public class DatabaseUpdate {
 	}
 
 	public Boolean updateSigner() {
-		String signer = passwordService.generate(64);
+//		String signer = passwordService.generate(64);
+		String signer = "123";
 		tokenService.updateTokenParts(signer);
 		String sql = "UPDATE SIGNER SET signer = '" + signer + "';";
 		return updateDatabase(sql);
