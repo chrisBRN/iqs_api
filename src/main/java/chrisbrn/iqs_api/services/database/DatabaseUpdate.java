@@ -1,6 +1,5 @@
 package chrisbrn.iqs_api.services.database;
 
-
 import chrisbrn.iqs_api.models.api.User;
 import chrisbrn.iqs_api.services.authentication.token.TokenService;
 import chrisbrn.iqs_api.utilities.PasswordService;
@@ -33,30 +32,36 @@ public class DatabaseUpdate {
 				"'" + hashedPassword + "'," +
 				"'" + user.getRole() + "'," +
 				"'" + user.getEmail() + "'" +
-				");"
+				") " +
+				"ON CONFLICT DO NOTHING;"
 		);
 
 		return updateDatabase(sql);
 	}
 
-	/** Ignores Role, Preventing Role Changes */
-	public boolean editSelf(String oldUsername, User newDetail){
+	/**
+	 * Ignores Role, Preventing Role Changes
+	 */
+	public boolean editSelf(String oldUsername, User newDetail) {
 
 		String hashedPassword = passwordService.hash(newDetail.getPassword());
 
 		String sql = (
 			"UPDATE USERS " +
 				"SET " +
-					"username = '" + newDetail.getUsername() + "', " +
-					"password = '" + hashedPassword + "', " +
-					"email = '" + newDetail.getEmail() + "' " +
-				"WHERE username = '" + oldUsername + "';"
+				"username = '" + newDetail.getUsername() + "', " +
+				"password = '" + hashedPassword + "', " +
+				"email = '" + newDetail.getEmail() + "' " +
+				"WHERE username = '" + oldUsername + "'" +
+				"AND NOT EXISTS (" +
+				"   SELECT 1 FROM USERS WHERE " +
+				"username = '" + newDetail.getUsername() + "' LIMIT 1);"
 		);
 
 		return updateDatabase(sql);
 	}
 
-	public boolean updatePassword(String username, String password){
+	public boolean updatePassword(String username, String password) {
 		String hashedPassword = passwordService.hash(password);
 
 		String sql = (
@@ -69,12 +74,10 @@ public class DatabaseUpdate {
 		return updateDatabase(sql);
 	}
 
-	public boolean deleteUser(String userId){
-		String sql = "DELETE FROM users WHERE id = " + userId + ";";
+	public boolean deleteUser(User user) {
+		String sql = "DELETE FROM users WHERE username = '" + user.getUsername() + "';";
 		return updateDatabase(sql);
 	}
-
-
 
 	public void updateSigner() {
 //		String signer = passwordService.generate(64);

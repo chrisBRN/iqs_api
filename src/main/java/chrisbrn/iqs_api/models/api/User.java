@@ -1,20 +1,13 @@
 package chrisbrn.iqs_api.models.api;
 
-public class User {
+import chrisbrn.iqs_api.models.HasRole;
 
-	private int id;
+public class User implements HasRole {
+
 	private String username;
 	private String role;
 	private String email;
 	private String password;
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
 
 	public String getUsername() {
 		return username;

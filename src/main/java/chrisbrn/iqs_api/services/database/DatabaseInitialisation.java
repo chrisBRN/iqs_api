@@ -1,12 +1,11 @@
 package chrisbrn.iqs_api.services.database;
 
 import chrisbrn.iqs_api.models.api.User;
+import chrisbrn.iqs_api.services.authentication.preDB.privilege.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class DatabaseInitialisation {
@@ -19,13 +18,14 @@ public class DatabaseInitialisation {
 
 		dbUpdateService.updateSigner();
 
-		Optional<User> init = dbQueryService.getUserByUsername("Admin");
+		int count = dbQueryService.getUserTypeCount(Role.ADMIN);
 
-		if(init.isPresent()){
-
-			if(init.get().getPassword() == null){
-				dbUpdateService.updatePassword("Admin","ChangeThis_4E@6d6u?");
-			}
+		if (count == 0){
+			User user = new User();
+			user.setUsername("Admin");
+			user.setRole(Role.ADMIN.name());
+			user.setPassword("Ch@ngeTh1s!");
+			dbUpdateService.addUser(user);
 		}
 	}
 }

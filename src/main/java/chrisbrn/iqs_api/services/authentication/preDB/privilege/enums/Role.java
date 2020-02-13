@@ -1,4 +1,4 @@
-package chrisbrn.iqs_api.services.authentication;
+package chrisbrn.iqs_api.services.authentication.preDB.privilege.enums;
 
 public enum Role {
 	ADMIN (3),
@@ -15,4 +15,5 @@ public enum Role {
 	public int getHierarchy() {
 		return this.hierarchy;
 	}
+
 }
