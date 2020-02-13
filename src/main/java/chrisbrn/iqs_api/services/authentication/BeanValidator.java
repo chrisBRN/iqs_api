@@ -1,9 +1,9 @@
-package chrisbrn.iqs_api.services.authentication.model;
+package chrisbrn.iqs_api.services.authentication;
 
-import chrisbrn.iqs_api.models.api.LoginDetails;
-import chrisbrn.iqs_api.models.api.User;
-import chrisbrn.iqs_api.services.authentication.AuthenticationUtilities;
-import chrisbrn.iqs_api.services.authentication.privilege.RoleUtilities;
+import chrisbrn.iqs_api.models.LoginDetails;
+import chrisbrn.iqs_api.models.User;
+import chrisbrn.iqs_api.utilities.AuthenticationUtilities;
+import chrisbrn.iqs_api.utilities.RoleUtilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

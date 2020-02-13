@@ -1,6 +1,6 @@
 package chrisbrn.iqs_api.utilities.converters;
 
-import chrisbrn.iqs_api.models.api.DecodedToken;
+import chrisbrn.iqs_api.models.DecodedToken;
 import chrisbrn.iqs_api.services.authentication.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;

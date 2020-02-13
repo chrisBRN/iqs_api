@@ -1,10 +1,10 @@
 package chrisbrn.iqs_api.contollers.user_management;
 
-import chrisbrn.iqs_api.models.api.User;
-import chrisbrn.iqs_api.services.authentication.model.BeanValidator;
-import chrisbrn.iqs_api.models.api.DecodedToken;
-import chrisbrn.iqs_api.services.authentication.privilege.PrivilegeValidator;
-import chrisbrn.iqs_api.services.authentication.privilege.enums.Role;
+import chrisbrn.iqs_api.models.User;
+import chrisbrn.iqs_api.services.authentication.BeanValidator;
+import chrisbrn.iqs_api.models.DecodedToken;
+import chrisbrn.iqs_api.services.authentication.PrivilegeValidator;
+import chrisbrn.iqs_api.models.Role;
 import chrisbrn.iqs_api.services.authentication.TokenService;
 import chrisbrn.iqs_api.services.database.DatabaseUpdate;
 import org.springframework.beans.factory.annotation.Autowired;

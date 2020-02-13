@@ -1,4 +1,4 @@
-package chrisbrn.iqs_api.services.authentication;
+package chrisbrn.iqs_api.utilities;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.stereotype.Service;
 

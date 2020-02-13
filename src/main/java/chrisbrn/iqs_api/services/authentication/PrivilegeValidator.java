@@ -1,9 +1,10 @@
-package chrisbrn.iqs_api.services.authentication.privilege;
+package chrisbrn.iqs_api.services.authentication;
 
 
 import chrisbrn.iqs_api.models.HasRole;
-import chrisbrn.iqs_api.models.api.DecodedToken;
-import chrisbrn.iqs_api.services.authentication.privilege.enums.Role;
+import chrisbrn.iqs_api.models.DecodedToken;
+import chrisbrn.iqs_api.models.Role;
+import chrisbrn.iqs_api.utilities.RoleUtilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,7 @@ public class PrivilegeValidator {
 
 	@Autowired RoleUtilities roleUtils;
 
-	public void hasRequiredHIERARCHY(DecodedToken takesAction, HasRole affects){
+	public void hasRequiredHIERARCHY(HasRole takesAction, HasRole affects){
 
 		int currentLvl 	= roleUtils.getHierarchyFromString(takesAction.getRole());
 		int requiredLvl = roleUtils.getHierarchyFromString(affects.getRole());
@@ -22,7 +23,7 @@ public class PrivilegeValidator {
 		sendHttpStatusIfInvalid(currentLvl >= requiredLvl);
 	}
 
-	public void isAtLeast(Role role, DecodedToken takesAction){
+	public void isAtLeast(Role role, HasRole takesAction){
 		sendHttpStatusIfInvalid(roleUtils.getRoleFromString(takesAction.getRole()) == role);
 	}
 

@@ -1,8 +1,8 @@
 package chrisbrn.iqs_api.contollers;
 
-import chrisbrn.iqs_api.models.api.LoginDetails;
-import chrisbrn.iqs_api.models.api.User;
-import chrisbrn.iqs_api.services.authentication.model.BeanValidator;
+import chrisbrn.iqs_api.models.LoginDetails;
+import chrisbrn.iqs_api.models.User;
+import chrisbrn.iqs_api.services.authentication.BeanValidator;
 import chrisbrn.iqs_api.services.authentication.TokenService;
 import chrisbrn.iqs_api.services.database.DatabaseQuery;
 import org.springframework.beans.factory.annotation.Autowired;

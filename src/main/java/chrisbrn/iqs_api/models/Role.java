@@ -1,4 +1,4 @@
-package chrisbrn.iqs_api.services.authentication.privilege.enums;
+package chrisbrn.iqs_api.models;
 
 public enum Role {
 	ADMIN (3),
@@ -15,5 +15,4 @@ public enum Role {
 	public int getHierarchy() {
 		return this.hierarchy;
 	}
-
 }

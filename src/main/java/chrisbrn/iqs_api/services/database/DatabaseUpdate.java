@@ -1,6 +1,6 @@
 package chrisbrn.iqs_api.services.database;
 
-import chrisbrn.iqs_api.models.api.User;
+import chrisbrn.iqs_api.models.User;
 import chrisbrn.iqs_api.services.authentication.TokenService;
 import chrisbrn.iqs_api.utilities.PasswordService;
 import org.jdbi.v3.core.Jdbi;

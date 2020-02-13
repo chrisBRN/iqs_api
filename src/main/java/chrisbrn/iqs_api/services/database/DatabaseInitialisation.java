@@ -1,7 +1,7 @@
 package chrisbrn.iqs_api.services.database;
 
-import chrisbrn.iqs_api.models.api.User;
-import chrisbrn.iqs_api.services.authentication.privilege.enums.Role;
+import chrisbrn.iqs_api.models.User;
+import chrisbrn.iqs_api.models.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;

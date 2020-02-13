@@ -1,4 +1,4 @@
-package chrisbrn.iqs_api.models.api;
+package chrisbrn.iqs_api.models;
 
 import chrisbrn.iqs_api.models.HasRole;
 
