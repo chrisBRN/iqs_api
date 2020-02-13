@@ -1,6 +1,6 @@
-package chrisbrn.iqs_api.services.authentication.preDB.privilege;
+package chrisbrn.iqs_api.services.authentication.privilege;
 
-import chrisbrn.iqs_api.services.authentication.preDB.privilege.enums.Role;
+import chrisbrn.iqs_api.services.authentication.privilege.enums.Role;
 import org.springframework.stereotype.Service;
 
 @Service

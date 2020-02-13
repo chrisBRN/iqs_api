@@ -2,8 +2,8 @@ package chrisbrn.iqs_api.contollers;
 
 import chrisbrn.iqs_api.models.api.LoginDetails;
 import chrisbrn.iqs_api.models.api.User;
-import chrisbrn.iqs_api.services.authentication.preDB.model.BeanValidator;
-import chrisbrn.iqs_api.services.authentication.token.TokenService;
+import chrisbrn.iqs_api.services.authentication.model.BeanValidator;
+import chrisbrn.iqs_api.services.authentication.TokenService;
 import chrisbrn.iqs_api.services.database.DatabaseQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +26,7 @@ public class LoginController {
 
 	@RequestMapping(value = "", method = POST)
 	public ResponseEntity<String> Login(@ModelAttribute LoginDetails loginDetails) {
-		beanValidator.loginDetailsBeanIsValid(loginDetails);
+		beanValidator.checkLoginDetailsModel(loginDetails);
 
 		Optional<User> user = dbQuery.loginIfSuppliedDetailsMatchDB(loginDetails);
 

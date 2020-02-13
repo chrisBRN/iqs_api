@@ -1,11 +1,11 @@
 package chrisbrn.iqs_api.contollers.user_management;
 
 import chrisbrn.iqs_api.models.api.User;
-import chrisbrn.iqs_api.services.authentication.preDB.model.BeanValidator;
+import chrisbrn.iqs_api.services.authentication.model.BeanValidator;
 import chrisbrn.iqs_api.models.api.DecodedToken;
-import chrisbrn.iqs_api.services.authentication.preDB.privilege.PrivilegeValidator;
-import chrisbrn.iqs_api.services.authentication.preDB.privilege.enums.Role;
-import chrisbrn.iqs_api.services.authentication.token.TokenService;
+import chrisbrn.iqs_api.services.authentication.privilege.PrivilegeValidator;
+import chrisbrn.iqs_api.services.authentication.privilege.enums.Role;
+import chrisbrn.iqs_api.services.authentication.TokenService;
 import chrisbrn.iqs_api.services.database.DatabaseUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,7 +27,7 @@ public class EditSelfController {
 	@RequestMapping(value = "/edit-self", method = POST)
 	public ResponseEntity<String> editSelf(@RequestHeader(value = "token") DecodedToken token, @ModelAttribute User updated) {
 
-		beanValidator.userBeanIsValid(updated);
+		beanValidator.checkUserModel(updated);
 		privilegeValidator.isAtLeast(Role.CANDIDATE, token);
 
 		return dbUpdate.editSelf(token.getUsername(), updated) ?

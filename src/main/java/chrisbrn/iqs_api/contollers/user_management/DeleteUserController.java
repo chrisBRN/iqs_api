@@ -1,10 +1,10 @@
 package chrisbrn.iqs_api.contollers.user_management;
 
 import chrisbrn.iqs_api.models.api.User;
-import chrisbrn.iqs_api.services.authentication.preDB.model.BeanValidator;
-import chrisbrn.iqs_api.services.authentication.preDB.privilege.PrivilegeValidator;
-import chrisbrn.iqs_api.services.authentication.preDB.privilege.enums.Role;
-import chrisbrn.iqs_api.services.authentication.preDB.privilege.RoleUtilities;
+import chrisbrn.iqs_api.services.authentication.model.BeanValidator;
+import chrisbrn.iqs_api.services.authentication.privilege.PrivilegeValidator;
+import chrisbrn.iqs_api.services.authentication.privilege.enums.Role;
+import chrisbrn.iqs_api.services.authentication.privilege.RoleUtilities;
 import chrisbrn.iqs_api.models.api.DecodedToken;
 import chrisbrn.iqs_api.services.database.DatabaseQuery;
 import chrisbrn.iqs_api.services.database.DatabaseUpdate;
@@ -28,7 +28,7 @@ public class DeleteUserController {
 	@RequestMapping(value = "/delete-user", method = POST)
 	public ResponseEntity<String> deleteUser(@RequestHeader(value = "token") DecodedToken token, @RequestParam User user) {
 
-		beanValidator.userBeanIsValid(user);
+		beanValidator.checkUserModel(user);
 		privilegeValidator.hasRequiredHIERARCHY(token, user);
 
 		if (roleUtilities.getRoleFromString(user.getRole()) == Role.ADMIN ){

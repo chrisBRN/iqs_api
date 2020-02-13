@@ -1,9 +1,9 @@
-package chrisbrn.iqs_api.services.authentication.preDB.privilege;
+package chrisbrn.iqs_api.services.authentication.privilege;
 
 
 import chrisbrn.iqs_api.models.HasRole;
 import chrisbrn.iqs_api.models.api.DecodedToken;
-import chrisbrn.iqs_api.services.authentication.preDB.privilege.enums.Role;
+import chrisbrn.iqs_api.services.authentication.privilege.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

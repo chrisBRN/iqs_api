@@ -2,8 +2,8 @@ package chrisbrn.iqs_api.contollers.user_management;
 
 import chrisbrn.iqs_api.models.api.User;
 
-import chrisbrn.iqs_api.services.authentication.preDB.model.BeanValidator;
-import chrisbrn.iqs_api.services.authentication.preDB.privilege.PrivilegeValidator;
+import chrisbrn.iqs_api.services.authentication.model.BeanValidator;
+import chrisbrn.iqs_api.services.authentication.privilege.PrivilegeValidator;
 import chrisbrn.iqs_api.models.api.DecodedToken;
 import chrisbrn.iqs_api.services.database.DatabaseUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class AddUserController {
 	@RequestMapping(value = "/add-user", method = POST)
 	public ResponseEntity<String> addUser(@RequestHeader(value = "token") DecodedToken token, @ModelAttribute User user) {
 
-		beanValidator.userBeanIsValid(user);
+		beanValidator.checkUserModel(user);
 		privilegeValidator.hasRequiredHIERARCHY(token, user);
 
 		return dbUpdate.addUser(user) ?

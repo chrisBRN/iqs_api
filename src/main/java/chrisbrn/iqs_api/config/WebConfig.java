@@ -1,7 +1,7 @@
 package chrisbrn.iqs_api.config;
 
 import chrisbrn.iqs_api.utilities.converters.StringTokenToClaimsConverter;
-import chrisbrn.iqs_api.services.authentication.token.TokenService;
+import chrisbrn.iqs_api.services.authentication.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;

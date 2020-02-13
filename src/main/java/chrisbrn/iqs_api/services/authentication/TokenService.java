@@ -1,8 +1,7 @@
-package chrisbrn.iqs_api.services.authentication.token;
+package chrisbrn.iqs_api.services.authentication;
 
 import chrisbrn.iqs_api.models.api.DecodedToken;
 import chrisbrn.iqs_api.models.api.User;
-import chrisbrn.iqs_api.services.authentication.preDB.AuthenticationUtilities;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
