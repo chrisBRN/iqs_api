@@ -1,6 +1,6 @@
 package chrisbrn.iqs_api.services.database;
 
-import chrisbrn.iqs_api.models.User;
+import chrisbrn.iqs_api.models.in.User;
 import chrisbrn.iqs_api.models.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -25,6 +25,7 @@ public class DatabaseInitialisation {
 			user.setUsername("Admin");
 			user.setRole(Role.ADMIN.name());
 			user.setPassword("Ch@ngeTh1s!");
+			user.setEmail("a@a.com");
 			dbUpdateService.addUser(user);
 		}
 	}

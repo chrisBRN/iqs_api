@@ -1,10 +1,12 @@
 package chrisbrn.iqs_api.config;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import org.jdbi.v3.core.Jdbi;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import javax.sql.DataSource;
@@ -37,4 +39,6 @@ public class AppConfig {
 	public Jdbi getJdbi(DataSource dataSource) {
 		return Jdbi.create(dataSource);
 	}
+
+
 }

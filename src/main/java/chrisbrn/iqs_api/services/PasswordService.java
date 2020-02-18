@@ -1,4 +1,4 @@
-package chrisbrn.iqs_api.utilities;
+package chrisbrn.iqs_api.services;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;

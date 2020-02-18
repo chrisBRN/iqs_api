@@ -1,17 +1,15 @@
 package chrisbrn.iqs_api.contollers;
 
-import chrisbrn.iqs_api.models.LoginDetails;
-import chrisbrn.iqs_api.models.User;
-import chrisbrn.iqs_api.services.authentication.BeanValidator;
-import chrisbrn.iqs_api.services.authentication.TokenService;
+import chrisbrn.iqs_api.models.database.UserDB;
+import chrisbrn.iqs_api.models.in.LoginDetails;
+import chrisbrn.iqs_api.services.HttpService;
 import chrisbrn.iqs_api.services.database.DatabaseQuery;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Optional;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -20,18 +18,19 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RequestMapping("/login")
 public class LoginController {
 
-	@Autowired BeanValidator beanValidator;
-	@Autowired DatabaseQuery dbQuery;
-	@Autowired TokenService tkService;
+	@Autowired DatabaseQuery databaseQuery;
+	@Autowired HttpService httpService;
 
-	@RequestMapping(value = "", method = POST)
-	public ResponseEntity<String> Login(@ModelAttribute LoginDetails loginDetails) {
-		beanValidator.checkLoginDetailsModel(loginDetails);
+	@RequestMapping(value = "", method = POST, consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public ResponseEntity<?> Login(@Valid @RequestBody LoginDetails loginDetails) {
 
-		Optional<User> user = dbQuery.loginIfSuppliedDetailsMatchDB(loginDetails);
+		Optional<UserDB> dbUser = (
+			databaseQuery.getUserWhereLoginDetailsMatchDB(loginDetails)
+		);
 
-		return user.isEmpty() ?
-			ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid Credentials") :
-			ResponseEntity.status(HttpStatus.OK).body(tkService.generateToken(user.get()));
+		return dbUser.isPresent() ?
+			httpService.loginSuccess(dbUser.get()) :
+			httpService.loginFailure();
 	}
 }

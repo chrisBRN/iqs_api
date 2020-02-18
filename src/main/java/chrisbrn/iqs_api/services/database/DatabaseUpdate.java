@@ -1,8 +1,8 @@
 package chrisbrn.iqs_api.services.database;
 
-import chrisbrn.iqs_api.models.User;
+import chrisbrn.iqs_api.models.in.User;
 import chrisbrn.iqs_api.services.authentication.TokenService;
-import chrisbrn.iqs_api.utilities.PasswordService;
+import chrisbrn.iqs_api.services.PasswordService;
 import org.jdbi.v3.core.Jdbi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

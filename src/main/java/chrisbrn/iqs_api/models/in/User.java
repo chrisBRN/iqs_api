@@ -1,8 +1,6 @@
-package chrisbrn.iqs_api.models;
+package chrisbrn.iqs_api.models.in;
 
-import chrisbrn.iqs_api.models.HasRole;
-
-public class User implements HasRole {
+public class User {
 
 	private String username;
 	private String role;

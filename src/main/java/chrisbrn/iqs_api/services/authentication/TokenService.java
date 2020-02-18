@@ -1,8 +1,6 @@
 package chrisbrn.iqs_api.services.authentication;
 
-import chrisbrn.iqs_api.models.DecodedToken;
-import chrisbrn.iqs_api.models.User;
-import chrisbrn.iqs_api.utilities.AuthenticationUtilities;
+import chrisbrn.iqs_api.models.database.UserDB;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -19,8 +17,6 @@ import java.util.Date;
 @Service
 public class TokenService {
 
-	@Autowired private AuthenticationUtilities utils;
-
 	private Algorithm algorithm;
 	private JWTVerifier verifier;
 	private final String issuer = "ChrisBRN";
@@ -31,15 +27,15 @@ public class TokenService {
 		this.verifier = JWT.require(algorithm).withIssuer(issuer).build();
 	}
 
-	public String generateToken(User userDB) {
+	public String generateToken(UserDB user) {
 		try {
 			long hour = 1000L * 60L * 60L;
 			return JWT.create()
 				.withIssuer(issuer)
 				.withExpiresAt(new Date(hour + System.currentTimeMillis()))
-				.withClaim("role", userDB.getRole())
-				.withClaim("username", userDB.getUsername())
-				.withClaim("email", userDB.getEmail())
+				.withClaim("role", user.getRole())
+				.withClaim("username", user.getUsername())
+				.withClaim("email", user.getEmail())
 				.sign(algorithm);
 		} catch (JWTCreationException e) {
 			throw new ResponseStatusException(
@@ -48,19 +44,19 @@ public class TokenService {
 		}
 	}
 
-	public DecodedToken getDecodedJWT(String token) {
-		try {
-			DecodedJWT jwt = verifier.verify(token);
-
-			return new DecodedToken(
-				jwt.getClaim("role").asString(),
-				jwt.getClaim("username").asString(),
-				jwt.getClaim("email").asString()
-			);
-		} catch (JWTVerificationException e) {
-			throw new ResponseStatusException(
-				HttpStatus.FORBIDDEN, "Invalid Token - Please Login", e
-			);
-		}
-	}
+//	public DecodedToken getDecodedJWT(String token) {
+//		try {
+//			DecodedJWT jwt = verifier.verify(token);
+//
+//			return new DecodedToken(
+//				jwt.getClaim("role").asString(),
+//				jwt.getClaim("username").asString(),
+//				jwt.getClaim("email").asString()
+//			);
+//		} catch (JWTVerificationException e) {
+//			throw new ResponseStatusException(
+//				HttpStatus.FORBIDDEN, "Invalid Token - Please Login", e
+//			);
+//		}
+//	}
 }

@@ -1,9 +1,9 @@
 package chrisbrn.iqs_api.services.database;
 
-import chrisbrn.iqs_api.models.LoginDetails;
-import chrisbrn.iqs_api.models.User;
+import chrisbrn.iqs_api.models.database.UserDB;
 import chrisbrn.iqs_api.models.Role;
-import chrisbrn.iqs_api.utilities.PasswordService;
+import chrisbrn.iqs_api.models.in.LoginDetails;
+import chrisbrn.iqs_api.services.PasswordService;
 import org.jdbi.v3.core.Jdbi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,28 +16,31 @@ public class DatabaseQuery {
 	@Autowired private Jdbi jdbi;
 	@Autowired private PasswordService pwService;
 
-	private Optional<User> getUserFromDB(String sql) {
+	private Optional<UserDB> getUserFromDB(String sql) {
 		return jdbi.withHandle(handle -> handle
 			.createQuery(sql)
-			.mapToBean(User.class)
-			.findFirst());
+			.mapToBean(UserDB.class)
+			.findFirst()
+		);
 	}
 
-	public Optional<User> getUserByUsername(String username) {
+	public Optional<UserDB> getUserByUsername(String username) {
 		String sql = "SELECT * FROM users WHERE username = '" + username + "' LIMIT 1;";
 		return getUserFromDB(sql);
 	}
 
-	public Optional<User> loginIfSuppliedDetailsMatchDB(LoginDetails details) {
+	public Optional<UserDB> getUserWhereLoginDetailsMatchDB(LoginDetails loginDetails){
 
-		Optional<User> user = getUserByUsername(details.getUsername());
+		Optional<UserDB> user = getUserByUsername(loginDetails.getUsername());
 
-		if (user.isEmpty() || !pwService.passwordMatches(details.getPassword(), user.get().getPassword())) {
-			return Optional.empty();
+		if (user.isPresent() &&
+			pwService.passwordMatches(loginDetails.getPassword(), user.get().getPassword())) {
+			return user;
 		}
 
-		return user;
+		return Optional.empty();
 	}
+
 
 	public int getUserTypeCount(Role role) {
 		String sql = "SELECT COUNT(role) FROM users WHERE role = '" + role.name() + "';";
