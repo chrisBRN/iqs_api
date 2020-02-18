@@ -1,18 +1,21 @@
 package chrisbrn.iqs_api.services.authentication;
 
+import chrisbrn.iqs_api.constants.Role;
 import chrisbrn.iqs_api.models.database.UserDB;
+import chrisbrn.iqs_api.models.in.DecodedToken;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class TokenService {
@@ -35,28 +38,26 @@ public class TokenService {
 				.withExpiresAt(new Date(hour + System.currentTimeMillis()))
 				.withClaim("role", user.getRole())
 				.withClaim("username", user.getUsername())
-				.withClaim("email", user.getEmail())
 				.sign(algorithm);
 		} catch (JWTCreationException e) {
 			throw new ResponseStatusException(
-				HttpStatus.SERVICE_UNAVAILABLE, "Error - Please Try Again", e
+				HttpStatus.SERVICE_UNAVAILABLE, "error - please try again", e
 			);
 		}
 	}
 
-//	public DecodedToken getDecodedJWT(String token) {
-//		try {
-//			DecodedJWT jwt = verifier.verify(token);
-//
-//			return new DecodedToken(
-//				jwt.getClaim("role").asString(),
-//				jwt.getClaim("username").asString(),
-//				jwt.getClaim("email").asString()
-//			);
-//		} catch (JWTVerificationException e) {
-//			throw new ResponseStatusException(
-//				HttpStatus.FORBIDDEN, "Invalid Token - Please Login", e
-//			);
-//		}
-//	}
+	public DecodedToken getDecodedJWT(String token) {
+		try {
+			DecodedJWT jwt = verifier.verify(token);
+			return new DecodedToken(
+				jwt.getClaim("username").asString(),
+				Role.valueOf(jwt.getClaim("role").asString()),
+				jwt.getClaim("email").asString()
+			);
+		} catch (Exception e) {
+			throw new ResponseStatusException(
+				HttpStatus.FORBIDDEN, "invalid token - please login", e
+			);
+		}
+	}
 }

@@ -1,6 +1,6 @@
 package chrisbrn.iqs_api.services.database;
 
-import chrisbrn.iqs_api.models.in.User;
+import chrisbrn.iqs_api.models.in.UserIn;
 import chrisbrn.iqs_api.services.authentication.TokenService;
 import chrisbrn.iqs_api.services.PasswordService;
 import org.jdbi.v3.core.Jdbi;
@@ -19,19 +19,19 @@ public class DatabaseUpdate {
 		return count != 0;
 	}
 
-	public boolean addUser(User user) {
+	public boolean addUser(UserIn userIn) {
 
-		String hashedPassword = passwordService.hash(user.getPassword());
+		String hashedPassword = passwordService.hash(userIn.getPassword());
 
 		String sql = (
 			"INSERT INTO USERS " +
 				"(username, password, role, email) " +
 				"VALUES " +
 				"(" +
-				"'" + user.getUsername() + "'," +
+				"'" + userIn.getUsername() + "'," +
 				"'" + hashedPassword + "'," +
-				"'" + user.getRole() + "'," +
-				"'" + user.getEmail() + "'" +
+				"'" + userIn.getRole() + "'," +
+				"'" + userIn.getEmail() + "'" +
 				") " +
 				"ON CONFLICT DO NOTHING;"
 		);
@@ -42,7 +42,7 @@ public class DatabaseUpdate {
 	/**
 	 * Ignores Role, Preventing Role Changes
 	 */
-	public boolean editSelf(String oldUsername, User newDetail) {
+	public boolean editSelf(String oldUsername, UserIn newDetail) {
 
 		String hashedPassword = passwordService.hash(newDetail.getPassword());
 
@@ -74,8 +74,8 @@ public class DatabaseUpdate {
 		return updateDatabase(sql);
 	}
 
-	public boolean deleteUser(User user) {
-		String sql = "DELETE FROM users WHERE username = '" + user.getUsername() + "';";
+	public boolean deleteUser(UserIn userIn) {
+		String sql = "DELETE FROM users WHERE username = '" + userIn.getUsername() + "';";
 		return updateDatabase(sql);
 	}
 

@@ -1,7 +1,8 @@
 package chrisbrn.iqs_api.services.database;
 
-import chrisbrn.iqs_api.models.in.User;
-import chrisbrn.iqs_api.models.Role;
+import chrisbrn.iqs_api.models.database.UserDB;
+import chrisbrn.iqs_api.models.in.UserIn;
+import chrisbrn.iqs_api.constants.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
@@ -21,12 +22,12 @@ public class DatabaseInitialisation {
 		int count = dbQueryService.getUserTypeCount(Role.ADMIN);
 
 		if (count == 0){
-			User user = new User();
-			user.setUsername("Admin");
-			user.setRole(Role.ADMIN.name());
-			user.setPassword("Ch@ngeTh1s!");
-			user.setEmail("a@a.com");
-			dbUpdateService.addUser(user);
+			UserIn userIn = new UserIn();
+			userIn.setUsername("Admin");
+			userIn.setRoleStr(Role.ADMIN.name());
+			userIn.setPassword("Ch@ngeTh1s!");
+			userIn.setEmail("a@a.com");
+			dbUpdateService.addUser(userIn);
 		}
 	}
 }

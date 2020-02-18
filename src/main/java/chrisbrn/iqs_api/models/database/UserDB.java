@@ -6,15 +6,15 @@ public class UserDB {
 	private String role;
 	private String email;
 	private String password;
-	private boolean isValid;
-
-	public boolean isValid() {
-		return isValid;
-	}
-
-	public void setValid(boolean valid) {
-		isValid = valid;
-	}
+//	private boolean isValid;
+//
+//	public boolean isValid() {
+//		return isValid;
+//	}
+//
+//	public void setValid(boolean valid) {
+//		isValid = valid;
+//	}
 
 	public String getUsername() {
 		return username;

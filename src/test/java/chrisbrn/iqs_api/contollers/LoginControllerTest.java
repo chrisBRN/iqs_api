@@ -2,7 +2,7 @@ package chrisbrn.iqs_api.contollers;
 
 import chrisbrn.iqs_api.config.IntegrationTestConfig;
 import chrisbrn.iqs_api.models.in.LoginDetails;
-import chrisbrn.iqs_api.models.in.User;
+import chrisbrn.iqs_api.models.in.UserIn;
 import chrisbrn.iqs_api.services.database.DatabaseUpdate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jdbi.v3.core.Jdbi;
@@ -46,20 +46,21 @@ class LoginControllerTest {
 
 	@BeforeAll
 	public void beforeAll() {
-		User testUser = new User();
-		testUser.setUsername("testUsername");
-		testUser.setPassword("test_P@ssw0rd");
-		dbUpdate.addUser(testUser);
+		UserIn testUserIn = new UserIn();
+		testUserIn.setUsername("testUsername");
+		testUserIn.setPassword("test_P@ssw0rd");
+		dbUpdate.addUser(testUserIn);
 	}
 
 	@Test
 	void returns_OkStatusAndToken_WithCorrectLoginDetails() throws Exception {
 
-		LoginDetails correctLogin = new LoginDetails("testUsername", "test_P@ssw0rd");
-		String json = objectMapper.writeValueAsString(correctLogin);
+		LoginDetails correctLogin = new LoginDetails(
+			"testUsername",
+			"test_P@ssw0rd");
 
 		mockMvc.perform(post("http://localhost:8080/login")
-			.content(json)
+			.content(objectMapper.writeValueAsString(correctLogin))
 			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
 			.andDo(print())
 			.andExpect(status().isOk())
@@ -70,11 +71,12 @@ class LoginControllerTest {
 	@Test
 	void returns_BadStatus_WithValidButIncorrectLoginDetails() throws Exception {
 
-		LoginDetails incorrectLogin = new LoginDetails("wrongUsername", "wrong_P@ssw0rd");
-		String json = objectMapper.writeValueAsString(incorrectLogin);
+		LoginDetails ValidButIncorrectLoginDetails = new LoginDetails(
+			"wrongUsername",
+			"wrong_P@ssw0rd");
 
 		mockMvc.perform(post("http://localhost:8080/login")
-			.content(json)
+			.content(objectMapper.writeValueAsString(ValidButIncorrectLoginDetails))
 			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
 			.andDo(print())
 			.andExpect(status().isForbidden())
@@ -83,20 +85,75 @@ class LoginControllerTest {
 	}
 
 	@Test
-	void returns_BadStatusAndMessage_WithInvalidLoginDetails() throws Exception {
+	void returns_BadStatusAndMessage_WithInvalidLoginDetails_tooLong() throws Exception {
 
-		LoginDetails incorrectUsernameFormatLogin = new LoginDetails("us@r", "wrong");
+		LoginDetails tooLong = new LoginDetails(
+			"usernameIsFarTooLongSoShouldThrowABC",
+			"Passw@rd15too_LongSoShouldTho3w12345");
+
+		mockMvc.perform(post("http://localhost:8080/login")
+			.content(objectMapper.writeValueAsString(tooLong))
+			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+			.andDo(print())
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$", hasSize(2)))
+			.andExpect(jsonPath("$.[*].message", hasItem("Invalid Username")))
+			.andExpect(jsonPath("$.[*].message", hasItem("Invalid Password")))
+			.andReturn();
+	}
+
+	@Test
+	void returns_BadStatusAndMessage_WithInvalidLoginDetails_tooShort() throws Exception {
+
+		LoginDetails tooShort = new LoginDetails(
+			"test",
+			"Sh@rt1");
+
+		mockMvc.perform(post("http://localhost:8080/login")
+			.content(objectMapper.writeValueAsString(tooShort))
+			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+			.andDo(print())
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$", hasSize(2)))
+			.andExpect(jsonPath("$.[*].message", hasItem("Invalid Username")))
+			.andExpect(jsonPath("$.[*].message", hasItem("Invalid Password")))
+			.andReturn();
+	}
+
+	@Test
+	void returns_BadStatusAndMessage_WithInvalidLoginDetails_symbolsInWrongPlaces() throws Exception {
+
+		LoginDetails wrongSymbols = new LoginDetails(
+			"test@sern1e",
+			"nosymbols");
+
+		mockMvc.perform(post("http://localhost:8080/login")
+			.content(objectMapper.writeValueAsString(wrongSymbols))
+			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+			.andDo(print())
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$", hasSize(2)))
+			.andExpect(jsonPath("$.[*].message", hasItem("Invalid Username")))
+			.andExpect(jsonPath("$.[*].message", hasItem("Invalid Password")))
+			.andReturn();
+	}
+
+
+	@Test
+	void returns_BadStatusAndMessage_WithInvalidLoginDetails_null() throws Exception {
+
+		LoginDetails incorrectUsernameFormatLogin = new LoginDetails(
+			null,
+			null);
 
 		mockMvc.perform(post("http://localhost:8080/login")
 			.content(objectMapper.writeValueAsString(incorrectUsernameFormatLogin))
 			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
 			.andDo(print())
 			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$", hasSize(4)))
-			.andExpect(jsonPath("$.[*].message", hasItem("Minimum length 5, max length 32")))
-			.andExpect(jsonPath("$.[*].message", hasItem("Only letters and / or numbers")))
-			.andExpect(jsonPath("$.[*].message", hasItem("Minimum length 8, max length 32")))
-			.andExpect(jsonPath("$.[*].message", hasItem("Password must contain at least one uppercase letter, one lowercase letter, a number & a symbol")))
+			.andExpect(jsonPath("$", hasSize(2)))
+			.andExpect(jsonPath("$.[*].message", hasItem("Invalid Username")))
+			.andExpect(jsonPath("$.[*].message", hasItem("Invalid Password")))
 			.andReturn();
 	}
 

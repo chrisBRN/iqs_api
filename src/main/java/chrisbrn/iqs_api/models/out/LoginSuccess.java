@@ -11,7 +11,7 @@ public class LoginSuccess implements Serializable {
 
 	private HttpStatus status = HttpStatus.OK;
 	private Integer statusCode = status.value();
-	private String information = "Login Success";
+	private String information = "login success";
 	private String token;
 
 	public LoginSuccess(String token) {

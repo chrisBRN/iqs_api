@@ -7,11 +7,11 @@ import org.springframework.http.HttpStatus;
 import java.io.Serializable;
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class LoginFailure implements Serializable {
+public class AddUserFailure implements Serializable {
 
 	private HttpStatus status = HttpStatus.FORBIDDEN;
 	private Integer statusCode = status.value();
-	private String information = "failed to add user - username already exists";
+	private String information = "failed to add user - username is already taken";
 
 	public HttpStatus getStatus() {
 		return status;

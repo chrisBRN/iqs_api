@@ -1,7 +1,7 @@
 package chrisbrn.iqs_api.services.database;
 
 import chrisbrn.iqs_api.models.database.UserDB;
-import chrisbrn.iqs_api.models.Role;
+import chrisbrn.iqs_api.constants.Role;
 import chrisbrn.iqs_api.models.in.LoginDetails;
 import chrisbrn.iqs_api.services.PasswordService;
 import org.jdbi.v3.core.Jdbi;
