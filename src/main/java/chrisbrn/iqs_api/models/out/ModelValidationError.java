@@ -1,4 +1,4 @@
-package chrisbrn.iqs_api.exception;
+package chrisbrn.iqs_api.models.out;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;

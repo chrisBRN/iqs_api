@@ -1,7 +1,8 @@
 package chrisbrn.iqs_api.services.database;
 
-import chrisbrn.iqs_api.models.database.UserDB;
 import chrisbrn.iqs_api.constants.Role;
+import chrisbrn.iqs_api.models.database.UserDB;
+import chrisbrn.iqs_api.models.in.DecodedToken;
 import chrisbrn.iqs_api.models.in.LoginDetails;
 import chrisbrn.iqs_api.services.PasswordService;
 import org.jdbi.v3.core.Jdbi;
@@ -41,12 +42,17 @@ public class DatabaseQuery {
 		return Optional.empty();
 	}
 
-
 	public int getUserTypeCount(Role role) {
 		String sql = "SELECT COUNT(role) FROM users WHERE role = '" + role.name() + "';";
 		return jdbi.withHandle(handle -> handle
 			.createQuery(sql)
 			.mapTo(Integer.class)
 			.findOnly());
+	}
+
+	public boolean storedRoleMatchesTokenRole(DecodedToken token){
+		Optional<UserDB> stored = getUserByUsername(token.getUsername());
+		return stored.isPresent() && stored.get().getRole().equals(token.getRole().name());
+
 	}
 }

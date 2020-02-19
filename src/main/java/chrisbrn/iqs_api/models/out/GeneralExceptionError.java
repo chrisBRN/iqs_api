@@ -4,14 +4,11 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import org.springframework.http.HttpStatus;
 
-import java.io.Serializable;
-
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class LoginFailure implements Serializable {
-
-	private HttpStatus status = HttpStatus.FORBIDDEN;
+public class GeneralExceptionError {
+	private HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 	private Integer statusCode = status.value();
-	private String information = "invalid credentials";
+	private String message = "there was an error, please try again. if the problem persists please contact an administrator";
 
 	public HttpStatus getStatus() {
 		return status;
@@ -21,7 +18,7 @@ public class LoginFailure implements Serializable {
 		return statusCode;
 	}
 
-	public String getInformation() {
-		return information;
+	public String getMessage() {
+		return message;
 	}
 }

@@ -4,14 +4,11 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import org.springframework.http.HttpStatus;
 
-import java.io.Serializable;
-
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class LoginFailure implements Serializable {
-
-	private HttpStatus status = HttpStatus.FORBIDDEN;
+public class MediaTypeNotSupportedError {
+	private HttpStatus status = HttpStatus.UNSUPPORTED_MEDIA_TYPE;
 	private Integer statusCode = status.value();
-	private String information = "invalid credentials";
+	private String message = "please format your request as Json";
 
 	public HttpStatus getStatus() {
 		return status;
@@ -21,7 +18,7 @@ public class LoginFailure implements Serializable {
 		return statusCode;
 	}
 
-	public String getInformation() {
-		return information;
+	public String getMessage() {
+		return message;
 	}
 }

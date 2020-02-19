@@ -4,6 +4,7 @@ import chrisbrn.iqs_api.constants.Role;
 import chrisbrn.iqs_api.validation.PasswordConstraint;
 import chrisbrn.iqs_api.validation.RoleConstraint;
 import chrisbrn.iqs_api.validation.UsernameConstraint;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.validation.constraints.Email;
 
@@ -38,11 +39,7 @@ public class UserIn {
 		return role;
 	}
 
-	public Role getRoleEnum(){
-		return Role.roleFromString(this.role);
-	}
-
-	public void setRoleStr(String role) {
+	public void setRole(String role) {
 		this.role = role;
 	}
 
@@ -52,6 +49,11 @@ public class UserIn {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	@JsonIgnore
+	public Role getRoleEnum(){
+		return Role.roleFromString(this.role);
 	}
 
 }

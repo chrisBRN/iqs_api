@@ -1,8 +1,8 @@
 package chrisbrn.iqs_api.services.database;
 
 import chrisbrn.iqs_api.models.in.UserIn;
-import chrisbrn.iqs_api.services.authentication.TokenService;
 import chrisbrn.iqs_api.services.PasswordService;
+import chrisbrn.iqs_api.services.authentication.TokenService;
 import org.jdbi.v3.core.Jdbi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class DatabaseUpdate {
 
 	@Autowired private Jdbi jdbi;
-	@Autowired private PasswordService passwordService;
+	@Autowired private PasswordService pwService;
 	@Autowired private TokenService tokenService;
 
 	public boolean updateDatabase(String SQLStatement) {
@@ -19,9 +19,13 @@ public class DatabaseUpdate {
 		return count != 0;
 	}
 
+	public int updateDatabaseGetCount(String SQLStatement) {
+		return jdbi.withHandle(handle -> handle.createUpdate(SQLStatement).execute());
+	}
+
 	public boolean addUser(UserIn userIn) {
 
-		String hashedPassword = passwordService.hash(userIn.getPassword());
+		String hashedPassword = pwService.hash(userIn.getPassword());
 
 		String sql = (
 			"INSERT INTO USERS " +
@@ -39,12 +43,9 @@ public class DatabaseUpdate {
 		return updateDatabase(sql);
 	}
 
-	/**
-	 * Ignores Role, Preventing Role Changes
-	 */
 	public boolean editSelf(String oldUsername, UserIn newDetail) {
 
-		String hashedPassword = passwordService.hash(newDetail.getPassword());
+		String hashedPassword = pwService.hash(newDetail.getPassword());
 
 		String sql = (
 			"UPDATE USERS " +
@@ -62,7 +63,7 @@ public class DatabaseUpdate {
 	}
 
 	public boolean updatePassword(String username, String password) {
-		String hashedPassword = passwordService.hash(password);
+		String hashedPassword = pwService.hash(password);
 
 		String sql = (
 			"UPDATE USERS " +

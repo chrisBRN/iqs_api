@@ -1,28 +1,34 @@
 package chrisbrn.iqs_api.exception;
 
+import chrisbrn.iqs_api.models.out.ModelValidationError;
 import chrisbrn.iqs_api.services.HttpService;
+import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.server.MediaTypeNotSupportedStatusException;
 
-
+import javax.annotation.Priority;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-@RestControllerAdvice
-public class CustomExceptionHandler {
+@ControllerAdvice
+public class MethodArgumentNotValidExceptionHandler {
 
 	@Autowired HttpService httpService;
 
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<?> modelValidationError(MethodArgumentNotValidException exception){
+	@ExceptionHandler(value = MethodArgumentNotValidException.class)
+	public ResponseEntity<?> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException exception){
 
 		List<ModelValidationError> errors = new ArrayList<>();
 
@@ -39,11 +45,4 @@ public class CustomExceptionHandler {
 		}
 		return httpService.modelValidationError(errors);
 	}
-
-	@ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-	public ResponseEntity<?> modelValidationError(HttpMediaTypeNotSupportedException exception) {
-		return httpService.mediaTypeNotSupported(new MediaTypeNotSupportedError());
-	}
-
-
 }
