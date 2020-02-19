@@ -42,7 +42,11 @@ class DecodedTokenFromHeaderConverterTest {
 	}
 
 	@Test
-	void decodesAndAttemptsToConvert_ThrowsAndReturnsNull() throws JWTVerificationException {
-		assertThrows(JWTVerificationException.class, ()-> converter.convert("badToken"));
+	void decodesAndAttemptsToConvert_ThrowsAndReturnsNull() {
+
+		DecodedToken badConverted = converter.convert("badToken");
+
+		assertNotNull(badConverted);
+		assertSame(badConverted.getRole(), Role.NO_ROLE);
 	}
 }
