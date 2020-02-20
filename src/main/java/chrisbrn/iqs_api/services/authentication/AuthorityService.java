@@ -8,6 +8,10 @@ public class AuthorityService {
 
 	public boolean canAddUser(Role takesAction, Role affectsUserOfType){
 
+		if (affectsUserOfType == Role.NO_ROLE) {
+			return false;
+		}
+
 		switch (takesAction){
 			case ADMIN:
 				return true;

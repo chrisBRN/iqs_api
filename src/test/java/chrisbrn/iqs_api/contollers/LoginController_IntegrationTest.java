@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ContextConfiguration(classes = IntegrationTestConfig.class)
 @ActiveProfiles({"testDataSource", "testLoginDetails"})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class LoginControllerTest {
+class LoginController_IntegrationTest {
 
 	@Autowired private ObjectMapper objectMapper;
 	@Autowired private MockMvc mockMvc;

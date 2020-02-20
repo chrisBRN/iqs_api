@@ -1,20 +1,13 @@
 package chrisbrn.iqs_api.models.database;
 
+import chrisbrn.iqs_api.models.in.DecodedToken;
+
 public class UserDB {
 
 	private String username;
 	private String role;
 	private String email;
 	private String password;
-//	private boolean isValid;
-//
-//	public boolean isValid() {
-//		return isValid;
-//	}
-//
-//	public void setValid(boolean valid) {
-//		isValid = valid;
-//	}
 
 	public String getUsername() {
 		return username;
@@ -47,5 +40,12 @@ public class UserDB {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	public boolean matchesDecodedToken(DecodedToken token){
+		return 	token.getUsername().equals(this.username) &&
+				token.getEmail().equals(this.email) &&
+				token.getRole().name().equals(this.role);
+	}
+
 
 }

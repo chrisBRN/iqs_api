@@ -4,6 +4,7 @@ package chrisbrn.iqs_api.contollers;
 import chrisbrn.iqs_api.models.database.UserDB;
 import chrisbrn.iqs_api.models.in.LoginDetails;
 import chrisbrn.iqs_api.services.HttpService;
+import chrisbrn.iqs_api.services.authentication.TokenService;
 import chrisbrn.iqs_api.services.database.DatabaseQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 public class LoginController {
 
 	@Autowired DatabaseQuery databaseQuery;
+	@Autowired TokenService tokenService;
 	@Autowired HttpService httpService;
 
 	@ResponseBody
@@ -34,7 +36,7 @@ public class LoginController {
 		);
 
 		return dbUser.isPresent() ?
-			httpService.loginSuccess(dbUser.get()) :
+			httpService.loginSuccess(tokenService.generateToken(dbUser.get())) :
 			httpService.loginFailure();
 	}
 }

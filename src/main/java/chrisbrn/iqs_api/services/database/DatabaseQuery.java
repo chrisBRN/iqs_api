@@ -50,9 +50,8 @@ public class DatabaseQuery {
 			.findOnly());
 	}
 
-	public boolean storedRoleMatchesTokenRole(DecodedToken token){
+	public boolean storedUserMatchesTokenUser(DecodedToken token){
 		Optional<UserDB> stored = getUserByUsername(token.getUsername());
-		return stored.isPresent() && stored.get().getRole().equals(token.getRole().name());
-
+		return stored.isPresent() && stored.get().matchesDecodedToken(token);
 	}
 }

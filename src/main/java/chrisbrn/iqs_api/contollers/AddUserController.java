@@ -16,10 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.util.logging.Level;
 
-import static chrisbrn.iqs_api.services.Log.LOGGER;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -27,26 +24,23 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RequestMapping("/admin")
 public class AddUserController {
 
-	@Autowired HttpService httpService;
-	@Autowired AuthorityService authService;
-	@Autowired DatabaseUpdate dbUpdate;
-	@Autowired DatabaseQuery dbQuery;
+	@Autowired private HttpService httpService;
+	@Autowired private AuthorityService authService;
+	@Autowired private DatabaseUpdate dbUpdate;
+	@Autowired private DatabaseQuery dbQuery;
 
 	@RequestMapping(value = "/add-user", method = POST, consumes = "application/json", produces = APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> addUser(@RequestHeader("token") DecodedToken token, @Valid @RequestBody UserIn userIn) {
 
-		Role takesAction = token.getRole();
+		Role actor = token.getRole();
 		Role affects = userIn.getRoleEnum();
 
-		if (!authService.canAddUser(takesAction, affects)) {
+		if (!authService.canAddUser(actor, affects)) {
 			return httpService.insufficientAuthority();
 		}
 
-		if (affects.equals(Role.ADMIN) && !dbQuery.storedRoleMatchesTokenRole(token)){
-			// If the user being added has an Admin Role, an additional check is performed
-			// Ensuring the token credentials match those on the database
-			LOGGER.log(Level.SEVERE, "Potential Escalation of Privilege Attack");
-			return httpService.badToken();
+		if (affects == Role.ADMIN && !dbQuery.storedUserMatchesTokenUser(token)) {
+			return httpService.tokenDBMismatch();
 		}
 
 		return dbUpdate.addUser(userIn) ?

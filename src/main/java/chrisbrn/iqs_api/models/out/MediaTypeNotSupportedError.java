@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 public class MediaTypeNotSupportedError {
 	private HttpStatus status = HttpStatus.UNSUPPORTED_MEDIA_TYPE;
 	private Integer statusCode = status.value();
-	private String message = "please format your request as Json";
+	private String message = "please format your request as json";
 
 	public HttpStatus getStatus() {
 		return status;

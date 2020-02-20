@@ -1,12 +1,14 @@
 package chrisbrn.iqs_api.converters;
 
-
-import chrisbrn.iqs_api.constants.Role;
 import chrisbrn.iqs_api.models.in.DecodedToken;
 import chrisbrn.iqs_api.services.authentication.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.regex.Pattern;
 
 @Component
 public class DecodedTokenFromHeaderConverter implements Converter<String, DecodedToken> {
@@ -16,11 +18,11 @@ public class DecodedTokenFromHeaderConverter implements Converter<String, Decode
 	@Override
 	public DecodedToken convert(String token){
 
-		try {
-			return tokenService.getDecodedJWT(token);
+		boolean matches = Pattern.compile("[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*").matcher(token).matches();
+
+		if(!matches){
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "please login");
 		}
- 		catch (Exception e){
-			return new DecodedToken("", Role.NO_ROLE, "");
-		}
+		return tokenService.getDecodedJWT(token);
 	}
 }

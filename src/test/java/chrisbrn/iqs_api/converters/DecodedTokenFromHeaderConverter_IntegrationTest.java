@@ -5,26 +5,26 @@ import chrisbrn.iqs_api.constants.Role;
 import chrisbrn.iqs_api.models.database.UserDB;
 import chrisbrn.iqs_api.models.in.DecodedToken;
 import chrisbrn.iqs_api.services.authentication.TokenService;
-import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.web.server.ResponseStatusException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-
 @ContextConfiguration(classes = IntegrationTestConfig.class)
 @ActiveProfiles({"testDataSource"})
-class DecodedTokenFromHeaderConverterTest {
+class DecodedTokenFromHeaderConverter_IntegrationTest {
 
 	@Autowired private TokenService tokenService;
 	@Autowired private DecodedTokenFromHeaderConverter converter;
 
 	@Test
 	void decodesAndConvertsValidToken() {
+
 		UserDB user = new UserDB();
 		user.setUsername("testAdminIn");
 		user.setPassword("test_P@ssw0rd");
@@ -42,11 +42,12 @@ class DecodedTokenFromHeaderConverterTest {
 	}
 
 	@Test
-	void decodesAndAttemptsToConvert_ThrowsAndReturnsNull() {
+	void decodesAndAttemptsToConvert_AndThrows() {
 
-		DecodedToken badConverted = converter.convert("badToken");
+		Exception thrown = assertThrows(ResponseStatusException.class, ()-> {
+			converter.convert("badToken");
+		});
 
-		assertNotNull(badConverted);
-		assertSame(badConverted.getRole(), Role.NO_ROLE);
+		assertTrue(thrown.getMessage().contains("please login"));
 	}
 }

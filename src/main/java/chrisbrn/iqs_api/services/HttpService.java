@@ -1,23 +1,23 @@
 package chrisbrn.iqs_api.services;
 
-import chrisbrn.iqs_api.models.database.UserDB;
 import chrisbrn.iqs_api.models.in.UserIn;
 import chrisbrn.iqs_api.models.out.*;
-import chrisbrn.iqs_api.services.authentication.TokenService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.logging.Level;
+
+import static chrisbrn.iqs_api.services.Log.LOGGER;
 
 @Service
 public class HttpService {
 
-	@Autowired TokenService tokenService;
 
-	public ResponseEntity<?> loginSuccess(UserDB user){
-		return ResponseEntity.status(HttpStatus.OK).body(new LoginSuccess(tokenService.generateToken(user)));
+
+	public ResponseEntity<?> loginSuccess(String token) {
+		return ResponseEntity.status(HttpStatus.OK).body(new LoginSuccess(token));
 	}
 
 	public ResponseEntity<?> loginFailure(){
@@ -25,6 +25,11 @@ public class HttpService {
 	}
 
 	public ResponseEntity<?> badToken(){
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new BadToken());
+	}
+
+	public ResponseEntity<?> tokenDBMismatch(){
+		LOGGER.log(Level.SEVERE, "Potential Escalation of Privilege Attack");
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new BadToken());
 	}
 
@@ -42,10 +47,6 @@ public class HttpService {
 
 	public ResponseEntity<?> mediaTypeNotSupported(){
 		return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(new MediaTypeNotSupportedError());
-	}
-
-	public ResponseEntity<?> generalError(){
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new GeneralExceptionError());
 	}
 
 	public ResponseEntity<?> modelValidationError(List<ModelValidationError> errors){
