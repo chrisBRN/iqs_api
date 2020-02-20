@@ -40,6 +40,7 @@ public class TokenService {
 				.withExpiresAt(new Date(hour + System.currentTimeMillis()))
 				.withClaim("role", user.getRole())
 				.withClaim("username", user.getUsername())
+				.withClaim("email", user.getEmail())
 				.sign(algorithm);
 		}
 		catch (Exception e) {
