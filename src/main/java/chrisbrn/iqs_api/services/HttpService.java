@@ -9,12 +9,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.logging.Level;
 
-import static chrisbrn.iqs_api.services.Log.LOGGER;
-
 @Service
 public class HttpService {
 
-
+	Log logger = new Log();
 
 	public ResponseEntity<?> loginSuccess(String token) {
 		return ResponseEntity.status(HttpStatus.OK).body(new LoginSuccess(token));
@@ -24,12 +22,8 @@ public class HttpService {
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new LoginFailure());
 	}
 
-	public ResponseEntity<?> badToken(){
-		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new BadToken());
-	}
-
 	public ResponseEntity<?> tokenDBMismatch(){
-		LOGGER.log(Level.SEVERE, "Potential Escalation of Privilege Attack");
+		logger.LOGGER.log(Level.SEVERE, "Potential Escalation of Privilege Attack");
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new BadToken());
 	}
 

@@ -44,8 +44,7 @@ public class DatabaseUpdate {
 	}
 
 	public void updateSigner() {
-//		String signer = passwordService.generate(64);
-		String signer = "123";
+		String signer = pwService.generate(64);
 		tokenService.updateTokenParts(signer);
 		String sql = "UPDATE SIGNER SET signer = '" + signer + "';";
 

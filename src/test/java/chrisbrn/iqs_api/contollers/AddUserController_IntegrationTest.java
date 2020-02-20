@@ -39,7 +39,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ContextConfiguration(classes = IntegrationTestConfig.class)
 @ActiveProfiles({"testDataSource"})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class AddUserController_IntegrationTest {
 
 	@Autowired private ObjectMapper objectMapper;
