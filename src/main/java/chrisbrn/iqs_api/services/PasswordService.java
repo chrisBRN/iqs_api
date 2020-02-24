@@ -10,7 +10,7 @@ import java.util.Base64;
 @Service
 public class PasswordService {
 
-	PasswordEncoder encoder = new BCryptPasswordEncoder(12);
+	final PasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
 	public String hash(String password) {
 		return encoder.encode(password);
@@ -22,8 +22,6 @@ public class PasswordService {
 
 	public String generate(int byteLength) {
 		// https://stackoverflow.com/questions/41107/how-to-generate-a-random-alpha-numeric-string
-
-		// Generates A Random Base64 Token
 		SecureRandom secureRandom = new SecureRandom();
 		byte[] array = new byte[byteLength];
 		secureRandom.nextBytes(array);

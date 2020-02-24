@@ -9,9 +9,9 @@ import java.io.Serializable;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class LoginFailure implements Serializable {
 
-	private HttpStatus status = HttpStatus.FORBIDDEN;
-	private Integer statusCode = status.value();
-	private String information = "invalid credentials";
+	private final HttpStatus status = HttpStatus.FORBIDDEN;
+	private final Integer statusCode = status.value();
+	private final String information = "invalid credentials";
 
 	public HttpStatus getStatus() {
 		return status;

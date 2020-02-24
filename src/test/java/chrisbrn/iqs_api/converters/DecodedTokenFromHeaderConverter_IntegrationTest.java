@@ -31,6 +31,8 @@ class DecodedTokenFromHeaderConverter_IntegrationTest {
 		user.setRole(Role.ADMIN.name());
 		user.setEmail("a@a.com");
 
+		tokenService.updateTokenParts("test");
+
 		String goodToken = tokenService.generateToken(user);
 		DecodedToken goodConverted = converter.convert(goodToken);
 		DecodedToken goodDecoded = tokenService.getDecodedJWT(goodToken);
@@ -44,9 +46,7 @@ class DecodedTokenFromHeaderConverter_IntegrationTest {
 	@Test
 	void decodesAndAttemptsToConvert_AndThrows() {
 
-		Exception thrown = assertThrows(ResponseStatusException.class, ()-> {
-			converter.convert("badToken");
-		});
+		Exception thrown = assertThrows(ResponseStatusException.class, () -> converter.convert("badToken"));
 
 		assertTrue(thrown.getMessage().contains("please login"));
 	}

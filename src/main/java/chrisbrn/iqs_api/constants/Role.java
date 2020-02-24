@@ -1,5 +1,7 @@
 package chrisbrn.iqs_api.constants;
 
+import java.util.Optional;
+
 public enum Role {
 	ADMIN,
 	EMPLOYEE,

@@ -17,6 +17,4 @@ public class IntegrationTestConfig {
 		EmbeddedPostgres pg = EmbeddedPostgres.builder().start();
 		return pg.getPostgresDatabase();
 	}
-
-
 }

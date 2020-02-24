@@ -9,9 +9,9 @@ import java.io.Serializable;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class BadToken implements Serializable {
 
-	private HttpStatus status = HttpStatus.FORBIDDEN;
-	private Integer statusCode = status.value();
-	private String information = "please log in";
+	private final HttpStatus status = HttpStatus.FORBIDDEN;
+	private final Integer statusCode = status.value();
+	private final String information = "please log in";
 
 	public HttpStatus getStatus() {
 		return status;

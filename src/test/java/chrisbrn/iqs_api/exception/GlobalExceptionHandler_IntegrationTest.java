@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ContextConfiguration(classes = IntegrationTestConfig.class)
 @ActiveProfiles({"testDataSource"})
-class GlobalExceptionHandlerTest {
+class GlobalExceptionHandler_IntegrationTest {
 
 	@Autowired private MockMvc mockMvc;
 	@Autowired private ObjectMapper objectMapper;
@@ -39,8 +39,8 @@ class GlobalExceptionHandlerTest {
 	@MockBean private DecodedTokenFromHeaderConverter converter;
 	@MockBean private TokenService tokenService;
 
-	private String login = "http://localhost:8080/login";
-	private String addUser = "http://localhost:8080/admin/add-user";
+	private final String login = "http://localhost:8080/login";
+	private final String addUser = "http://localhost:8080/admin/add-user";
 
 	@Test
 	void handlesMediaUnsupportedException_ReturnsStatusAndMessage_All() throws Exception {

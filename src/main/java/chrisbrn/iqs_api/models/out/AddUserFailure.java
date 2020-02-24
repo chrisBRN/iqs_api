@@ -8,9 +8,9 @@ import java.io.Serializable;
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class AddUserFailure implements Serializable {
-	private HttpStatus status = HttpStatus.BAD_REQUEST;
-	private Integer statusCode = status.value();
-	private String information = "failed to add user - username is already taken";
+	private final HttpStatus status = HttpStatus.BAD_REQUEST;
+	private final Integer statusCode = status.value();
+	private final String information = "failed to add user - username is already taken";
 
 	public HttpStatus getStatus() {
 		return status;

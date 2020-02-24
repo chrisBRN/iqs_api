@@ -6,21 +6,19 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.regex.Pattern;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class TokenService_UnitTests {
 
 	@Test
-	void throws_whenNullSignerIsPassedToUpdateTokenParts() {
-		TokenService tokenService = new TokenService();
-		assertThrows(ResponseStatusException.class, ()-> tokenService.updateTokenParts(null));
+	void doesNotThrow_whenNullSignerIsPassedToUpdateTokenParts() {
+		assertDoesNotThrow(() -> new TokenService().updateTokenParts(null));
 	}
 
 	@Test
 	void throws_whenSignerHasNotBeenSet() {
 		TokenService tokenService = new TokenService();
-		assertThrows(ResponseStatusException.class, ()-> tokenService.generateToken(new UserDB()));
+		assertThrows(ResponseStatusException.class, () -> tokenService.generateToken(new UserDB()));
 	}
 
 	@Test
@@ -43,6 +41,6 @@ class TokenService_UnitTests {
 		TokenService tokenService = new TokenService();
 		tokenService.updateTokenParts("secret");
 
-		assertThrows(ResponseStatusException.class, ()-> tokenService.getDecodedJWT("bad@Token"));
+		assertThrows(ResponseStatusException.class, () -> tokenService.getDecodedJWT("bad@Token"));
 	}
 }

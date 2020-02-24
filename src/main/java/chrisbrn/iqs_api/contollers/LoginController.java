@@ -23,13 +23,13 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RequestMapping("/login")
 public class LoginController {
 
-	@Autowired DatabaseQuery databaseQuery;
-	@Autowired TokenService tokenService;
-	@Autowired HttpService httpService;
+	@Autowired private DatabaseQuery databaseQuery;
+	@Autowired private TokenService tokenService;
+	@Autowired private HttpService httpService;
 
 	@ResponseBody
 	@RequestMapping(value = "", method = POST, consumes = "application/json", produces = APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> Login(@Valid @RequestBody LoginDetails loginDetails) {
+	public ResponseEntity<?> login(@Valid @RequestBody LoginDetails loginDetails) {
 
 		Optional<UserDB> dbUser = (
 			databaseQuery.getUserWhereLoginDetailsMatchDB(loginDetails)

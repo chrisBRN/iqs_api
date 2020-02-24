@@ -30,12 +30,11 @@ public class DatabaseQuery {
 		return getUserFromDB(sql);
 	}
 
-	public Optional<UserDB> getUserWhereLoginDetailsMatchDB(LoginDetails loginDetails){
+	public Optional<UserDB> getUserWhereLoginDetailsMatchDB(LoginDetails loginDetails) {
 
 		Optional<UserDB> user = getUserByUsername(loginDetails.getUsername());
 
-		if (user.isPresent() &&
-			pwService.passwordMatches(loginDetails.getPassword(), user.get().getPassword())) {
+		if (user.isPresent() && pwService.passwordMatches(loginDetails.getPassword(), user.get().getPassword())) {
 			return user;
 		}
 
@@ -50,8 +49,9 @@ public class DatabaseQuery {
 			.findOnly());
 	}
 
-	public boolean storedUserMatchesTokenUser(DecodedToken token){
+	public boolean storedUserMatchesTokenUser(DecodedToken token) {
 		Optional<UserDB> stored = getUserByUsername(token.getUsername());
-		return stored.isPresent() && stored.get().matchesDecodedToken(token);
+		return stored.isPresent() &&
+			stored.get().matchesDecodedToken(token);
 	}
 }

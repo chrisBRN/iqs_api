@@ -9,10 +9,10 @@ import java.io.Serializable;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class LoginSuccess implements Serializable {
 
-	private HttpStatus status = HttpStatus.OK;
-	private Integer statusCode = status.value();
-	private String information = "login success";
-	private String token;
+	private final HttpStatus status = HttpStatus.OK;
+	private final Integer statusCode = status.value();
+	private final String information = "login success";
+	private final String token;
 
 	public LoginSuccess(String token) {
 		this.token = token;
@@ -33,6 +33,4 @@ public class LoginSuccess implements Serializable {
 	public String getToken() {
 		return token;
 	}
-
-
 }

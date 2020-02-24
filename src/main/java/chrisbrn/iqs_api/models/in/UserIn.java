@@ -7,6 +7,7 @@ import chrisbrn.iqs_api.validation.UsernameConstraint;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.validation.constraints.Email;
+import java.util.Optional;
 
 public class UserIn {
 
@@ -52,8 +53,7 @@ public class UserIn {
 	}
 
 	@JsonIgnore
-	public Role getRoleEnum(){
+	public Role getRoleEnum() {
 		return Role.roleFromString(this.role);
 	}
-
 }

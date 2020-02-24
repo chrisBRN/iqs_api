@@ -11,13 +11,13 @@ import java.io.Serializable;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class AddUserSuccess implements Serializable {
 
-	private HttpStatus status = HttpStatus.OK;
-	private Integer statusCode = status.value();
+	private final HttpStatus status = HttpStatus.OK;
+	private final Integer statusCode = status.value();
 
 	@JsonProperty("added_user")
-	private UserIn user;
+	private final UserIn user;
 
-	public AddUserSuccess(UserIn user){
+	public AddUserSuccess(UserIn user) {
 		this.user = user;
 		user.setPassword("********");
 	}

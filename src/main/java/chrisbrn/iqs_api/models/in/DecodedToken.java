@@ -4,9 +4,9 @@ import chrisbrn.iqs_api.constants.Role;
 
 public class DecodedToken {
 
-	private String username;
-	private Role role;
-	private String email;
+	private final String username;
+	private final Role role;
+	private final String email;
 
 	public DecodedToken(String username, Role role, String email) {
 		this.username = username;

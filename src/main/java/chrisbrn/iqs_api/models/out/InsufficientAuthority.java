@@ -9,9 +9,9 @@ import java.io.Serializable;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class InsufficientAuthority implements Serializable {
 
-	private HttpStatus status = HttpStatus.FORBIDDEN;
-	private Integer statusCode = status.value();
-	private String information = "user lacks required permissions, please contract the administration team if this is unexpected";
+	private final HttpStatus status = HttpStatus.FORBIDDEN;
+	private final Integer statusCode = status.value();
+	private final String information = "user lacks required permissions, please contract the administration team if this is unexpected";
 
 	public HttpStatus getStatus() {
 		return status;

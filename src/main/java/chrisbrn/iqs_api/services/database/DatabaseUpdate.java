@@ -1,5 +1,6 @@
 package chrisbrn.iqs_api.services.database;
 
+import chrisbrn.iqs_api.constants.Role;
 import chrisbrn.iqs_api.models.in.UserIn;
 import chrisbrn.iqs_api.services.PasswordService;
 import chrisbrn.iqs_api.services.authentication.TokenService;
@@ -17,10 +18,6 @@ public class DatabaseUpdate {
 	public boolean updateDatabase(String SQLStatement) {
 		int count = jdbi.withHandle(handle -> handle.createUpdate(SQLStatement).execute());
 		return count != 0;
-	}
-
-	public int updateDatabaseGetCount(String SQLStatement) {
-		return jdbi.withHandle(handle -> handle.createUpdate(SQLStatement).execute());
 	}
 
 	public boolean addUser(UserIn userIn) {
@@ -44,13 +41,23 @@ public class DatabaseUpdate {
 	}
 
 	public void updateSigner() {
-//		String signer = pwService.generate(64);
-		String signer = "temp";
+		String signer = pwService.generate(64);
 		tokenService.updateTokenParts(signer);
 		String sql = "UPDATE SIGNER SET signer = '" + signer + "';";
 
 		updateDatabase(sql);
 	}
+
+	public void initUpdate(int adminCount) {
+
+		if (adminCount == 0) {
+			UserIn initAdmin = new UserIn();
+			initAdmin.setUsername("Admin");
+			initAdmin.setPassword(Role.ADMIN.name());
+			initAdmin.setRole("Ch@ngeTh1s!");
+			initAdmin.setEmail("a@a.com");
+
+			addUser(initAdmin);
+		}
+	}
 }
-
-

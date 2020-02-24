@@ -31,17 +31,17 @@ public class GlobalExceptionHandler {
 
 	@Order(Ordered.HIGHEST_PRECEDENCE)
 	@ExceptionHandler(value = MethodArgumentNotValidException.class)
-	public ResponseEntity<?> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException exception){
+	public ResponseEntity<?> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException exception) {
 
 		List<ModelValidationError> errors = new ArrayList<>();
 
-		for (ObjectError error : exception.getBindingResult().getAllErrors()){
+		for (ObjectError error : exception.getBindingResult().getAllErrors()) {
 
-			String field 	= ((FieldError) error).getField();
+			String field = ((FieldError) error).getField();
 			String rejected = (String) ((FieldError) error).getRejectedValue();
-			String message 	= error.getDefaultMessage();
+			String message = error.getDefaultMessage();
 
-			if (field.equals("password")){
+			if (field.equals("password")) {
 				rejected = "********";
 			}
 			errors.add(new ModelValidationError(field, rejected, message));

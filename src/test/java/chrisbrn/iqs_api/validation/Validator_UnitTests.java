@@ -1,6 +1,9 @@
 package chrisbrn.iqs_api.validation;
 
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintValidatorContext;
 
@@ -14,6 +17,11 @@ class Validator_UnitTests {
 	private final UsernameValidator usernameValidator = new UsernameValidator();
 	private final PasswordValidator passwordValidator = new PasswordValidator();
 	private final RoleValidator roleValidator = new RoleValidator();
+
+	@Before
+	public void setUp(){
+		constraintValidatorContext = Mockito.mock(ConstraintValidatorContext.class);
+	}
 
 	@Test
 	public void returnsTrueWithValidUsername() {

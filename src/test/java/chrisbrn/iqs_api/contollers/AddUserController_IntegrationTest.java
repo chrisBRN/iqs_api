@@ -21,10 +21,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -51,14 +52,14 @@ class AddUserController_IntegrationTest {
 	@MockBean private DatabaseUpdate dbUpdate;
 	@MockBean private DatabaseQuery dbQuery;
 
-	private String token = "mocked";
+	private final String token = "mocked";
 
-	private UserIn adminIn = new UserIn();
-	private UserIn employeeIn = new UserIn();
-	private UserIn candidateIn = new UserIn();
-	private UserIn noRoleIn = new UserIn();
+	private final UserIn adminIn = new UserIn();
+	private final UserIn employeeIn = new UserIn();
+	private final UserIn candidateIn = new UserIn();
+	private final UserIn noRoleIn = new UserIn();
 
-	private UserDB adminDB = new UserDB();
+	private final UserDB adminDB = new UserDB();
 
 	private DecodedToken adminToken;
 	private DecodedToken employeeToken;
@@ -187,16 +188,16 @@ class AddUserController_IntegrationTest {
 	@Test
 	void tokenDatabaseMisMatch() throws Exception {
 
-		UserIn whatWeHave = new UserIn();
-		whatWeHave.setUsername("test");
-		whatWeHave.setPassword("test");
-		whatWeHave.setRole("EMPLOYEE");
-		whatWeHave.setEmail("a@a.com");
-		update.addUser(whatWeHave);
+		UserDB fakeDatabase = new UserDB();
+		fakeDatabase.setUsername("fake_username");
+		fakeDatabase.setPassword("test");
+		fakeDatabase.setRole("EMPLOYEE");
+		fakeDatabase.setEmail("a@a.com");
 
 		DecodedToken whoseLoggedIn = new DecodedToken("test_username", Role.ADMIN, "a@a.com");
 
 		when(converter.convert(token)).thenReturn(whoseLoggedIn);
+		when(dbQuery.getUserByUsername(Mockito.any(String.class))).thenReturn(Optional.of(fakeDatabase));
 
 		mockMvc.perform(post("http://localhost:8080/admin/add-user")
 			.header("token", token)

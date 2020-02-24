@@ -12,38 +12,38 @@ import java.util.logging.Level;
 @Service
 public class HttpService {
 
-	Log logger = new Log();
+	final Log logger = new Log();
 
 	public ResponseEntity<?> loginSuccess(String token) {
 		return ResponseEntity.status(HttpStatus.OK).body(new LoginSuccess(token));
 	}
 
-	public ResponseEntity<?> loginFailure(){
+	public ResponseEntity<?> loginFailure() {
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new LoginFailure());
 	}
 
-	public ResponseEntity<?> tokenDBMismatch(){
+	public ResponseEntity<?> tokenDBMismatch() {
 		logger.LOGGER.log(Level.SEVERE, "Potential Escalation of Privilege Attack");
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new BadToken());
 	}
 
-	public ResponseEntity<?> addUserSuccess(UserIn user){
+	public ResponseEntity<?> addUserSuccess(UserIn user) {
 		return ResponseEntity.status(HttpStatus.OK).body(new AddUserSuccess(user));
 	}
 
-	public ResponseEntity<?> addUserFailure(){
+	public ResponseEntity<?> addUserFailure() {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new AddUserFailure());
 	}
 
-	public ResponseEntity<?> insufficientAuthority(){
+	public ResponseEntity<?> insufficientAuthority() {
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new InsufficientAuthority());
 	}
 
-	public ResponseEntity<?> mediaTypeNotSupported(){
+	public ResponseEntity<?> mediaTypeNotSupported() {
 		return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(new MediaTypeNotSupportedError());
 	}
 
-	public ResponseEntity<?> modelValidationError(List<ModelValidationError> errors){
+	public ResponseEntity<?> modelValidationError(List<ModelValidationError> errors) {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
 	}
 }

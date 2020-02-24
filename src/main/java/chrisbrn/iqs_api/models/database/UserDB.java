@@ -1,6 +1,5 @@
 package chrisbrn.iqs_api.models.database;
 
-import chrisbrn.iqs_api.constants.Role;
 import chrisbrn.iqs_api.models.in.DecodedToken;
 
 public class UserDB {
@@ -42,10 +41,10 @@ public class UserDB {
 		this.password = password;
 	}
 
-	public boolean matchesDecodedToken(DecodedToken token){
-		return 	token.getUsername().equals(this.getUsername()) &&
-				token.getEmail().equals(this.getEmail()) &&
-				token.getRole().name().equals(this.getRole());
+	public boolean matchesDecodedToken(DecodedToken token) {
+		return token.getUsername().equals(this.getUsername()) &&
+			token.getEmail().equals(this.getEmail()) &&
+			token.getRole().name().equals(this.getRole());
 	}
 
 

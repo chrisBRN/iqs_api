@@ -5,6 +5,7 @@ import chrisbrn.iqs_api.services.authentication.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -16,11 +17,11 @@ public class DecodedTokenFromHeaderConverter implements Converter<String, Decode
 	@Autowired private TokenService tokenService;
 
 	@Override
-	public DecodedToken convert(String token){
+	public DecodedToken convert(@NonNull String token) {
 
 		boolean matches = Pattern.compile("[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*").matcher(token).matches();
 
-		if(!matches){
+		if (!matches) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "please login");
 		}
 		return tokenService.getDecodedJWT(token);
