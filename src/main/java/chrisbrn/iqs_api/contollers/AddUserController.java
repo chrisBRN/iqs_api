@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-import java.util.Optional;
-
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -26,10 +24,18 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RequestMapping("/admin")
 public class AddUserController {
 
-	@Autowired private HttpService httpService;
-	@Autowired private AuthorityService authService;
-	@Autowired private DatabaseUpdate dbUpdate;
-	@Autowired private DatabaseQuery dbQuery;
+	private HttpService httpService;
+	private AuthorityService authService;
+	private DatabaseUpdate dbUpdate;
+	private DatabaseQuery dbQuery;
+
+	@Autowired
+	public AddUserController(HttpService httpService, AuthorityService authService, DatabaseUpdate dbUpdate, DatabaseQuery dbQuery) {
+		this.httpService = httpService;
+		this.authService = authService;
+		this.dbUpdate = dbUpdate;
+		this.dbQuery = dbQuery;
+	}
 
 	@RequestMapping(value = "/add-user", method = POST, consumes = "application/json", produces = APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> addUser(@RequestHeader("token") DecodedToken token, @Valid @RequestBody UserIn userIn) {

@@ -14,7 +14,12 @@ import java.util.regex.Pattern;
 @Component
 public class DecodedTokenFromHeaderConverter implements Converter<String, DecodedToken> {
 
-	@Autowired private TokenService tokenService;
+	private TokenService tokenService;
+
+	@Autowired
+	public DecodedTokenFromHeaderConverter(TokenService tokenService) {
+		this.tokenService = tokenService;
+	}
 
 	@Override
 	public DecodedToken convert(@NonNull String token) {

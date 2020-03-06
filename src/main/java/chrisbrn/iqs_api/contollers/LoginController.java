@@ -8,10 +8,7 @@ import chrisbrn.iqs_api.services.authentication.TokenService;
 import chrisbrn.iqs_api.services.database.DatabaseQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Optional;
@@ -20,12 +17,20 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5000"})
 @RequestMapping("/login")
 public class LoginController {
 
-	@Autowired private DatabaseQuery databaseQuery;
-	@Autowired private TokenService tokenService;
-	@Autowired private HttpService httpService;
+	private DatabaseQuery databaseQuery;
+	private TokenService tokenService;
+	private HttpService httpService;
+
+	@Autowired
+	public LoginController(DatabaseQuery databaseQuery, TokenService tokenService, HttpService httpService) {
+		this.databaseQuery = databaseQuery;
+		this.tokenService = tokenService;
+		this.httpService = httpService;
+	}
 
 	@ResponseBody
 	@RequestMapping(value = "", method = POST, consumes = "application/json", produces = APPLICATION_JSON_VALUE)

@@ -21,7 +21,12 @@ public class GlobalExceptionHandler {
 
 	//TODO https://dzone.com/articles/customize-error-responses-in-spring-boot
 
-	@Autowired HttpService httpService;
+	private HttpService httpService;
+
+	@Autowired
+	public GlobalExceptionHandler(HttpService httpService) {
+		this.httpService = httpService;
+	}
 
 	@Order(Ordered.HIGHEST_PRECEDENCE)
 	@ExceptionHandler(value = HttpMediaTypeNotSupportedException.class)

@@ -46,6 +46,4 @@ public class UserDB {
 			token.getEmail().equals(this.getEmail()) &&
 			token.getRole().name().equals(this.getRole());
 	}
-
-
 }
